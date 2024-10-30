@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">SiembraSmart</string>
+
+
+    <string name="temperature_text">Temperatura: %s°C</string>
+    <string name="humidity_text">Humedad: %s%%</string>
+    <string name="precipitation_text">Precipitación: %s mm</string>
+    <string name="wind_speed_text">Velocidad del Viento: %s km/h</string>
+    <string name="cloud_cover_text">Cobertura de Nubes: %s%%</string>
+
+    <string-array name="cultivos_array">
+        <item>Cacao</item>
+        <item>Maíz</item>
+        <item>Café</item>
+        <item>Frijol</item>
+    </string-array>
+
+</resources>

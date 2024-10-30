@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_clima"
+        android:icon="@drawable/clima_icono_foreground"
+        android:title="Clima" />
+    <item
+        android:id="@+id/navigation_modelo"
+        android:icon="@drawable/modelo_icono_foreground"
+        android:title="Consejos" />
+
+    <item
+        android:id="@+id/navigation_mas"
+        android:icon="@drawable/more"
+        android:title="Más" />
+
+    <item
+        android:id="@+id/navigation_noticias"
+        android:icon="@drawable/noticias_icono_foreground"
+        android:title="Noticias" />
+
+    <item
+        android:id="@+id/navigation_notificacion"
+        android:icon="@drawable/notificaciones_icono_foreground"
+        android:title="Notificaciones" />
+
+</menu>

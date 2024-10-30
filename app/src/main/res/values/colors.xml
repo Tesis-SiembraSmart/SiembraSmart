@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="purple">#AC18EB</color>
+    <color name="colorPrimary">#5E18EB</color>
+    <color name="red">#FF0000</color>
+    <color name="background_color">#2C2C2C</color>
+    <color name="verde_icon">#34C6A8</color>
+    <color name="azul">#0031C3</color>
+
+    <!-- COLORES DE PRUEBA-->
+    <!-- Verde (para el texto y elementos principales) -->    <color name="tittles">#4CAF50</color>
+    <!-- Marrón (para botones principales -->
+    <color name="buttons_primary">#8B4513 </color>
+
+    <!-- Amarillo (para botones secundarios y alertas) -->
+    <color name="buttons_secundary">#FFEB3B </color>
+    <!-- Azul (para información climática y datos) -->
+    <color name="info_primary">#2196F3 </color>
+
+    <!-- Gris claro (para secciones secundarias o tarjetas-->
+    <color name="section_primary">#F5F5F5</color>
+
+    <!-- Texto Principal -->
+    <color name="text_primary">#212121 </color>
+    <!-- Texto Secundario -->
+    <color name="text_secundary">#757575  </color>
+
+
+
+</resources>
