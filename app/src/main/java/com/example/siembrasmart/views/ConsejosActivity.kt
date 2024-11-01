@@ -5,21 +5,19 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.example.siembrasmart.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.example.siembrasmart.databinding.ActivityConsejosBinding
 import com.example.siembrasmart.utils.Navigation
-import com.example.siembrasmart.models.ConsejosModel
+import com.example.siembrasmart.models.Consejos
 import com.example.siembrasmart.controllers.ConsejosController
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ConsejosActivity : Navigation() {
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityConsejosBinding
-    private lateinit var model: ConsejosModel
+    private lateinit var model: Consejos
     private lateinit var controller: ConsejosController
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +31,7 @@ class ConsejosActivity : Navigation() {
         auth = Firebase.auth
 
         // Inicialización del modelo y controlador
-        model = ConsejosModel()
+        model = Consejos()
         controller = ConsejosController(model)
 
         // Configuración de la navegación inferior y la Toolbar

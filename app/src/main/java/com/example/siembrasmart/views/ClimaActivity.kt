@@ -10,7 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.siembrasmart.R
 import com.example.siembrasmart.controllers.ClimaController
-import com.example.siembrasmart.models.ClimaModel
+import com.example.siembrasmart.models.Clima
 import com.example.siembrasmart.utils.Navigation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -28,12 +28,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.example.siembrasmart.databinding.ActivityClimaBinding
-import androidx.appcompat.widget.Toolbar
 
 
 class ClimaActivity : Navigation(), OnMapReadyCallback {
     private lateinit var auth: FirebaseAuth
-    private lateinit var climaModel: ClimaModel
+    private lateinit var clima: Clima
     private lateinit var climaController: ClimaController
 
     private lateinit var binding: ActivityClimaBinding
@@ -46,8 +45,8 @@ class ClimaActivity : Navigation(), OnMapReadyCallback {
         binding = ActivityClimaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        climaModel = ClimaModel()
-        climaController = ClimaController(climaModel)
+        clima = Clima()
+        climaController = ClimaController(clima)
 
         auth = Firebase.auth
 
@@ -57,16 +56,16 @@ class ClimaActivity : Navigation(), OnMapReadyCallback {
 
         binding.pronostico.setOnClickListener {
             val intent = Intent(this, ForecastsActivity::class.java)
-            intent.putExtra("temperaturas", climaModel.temperaturas.toDoubleArray())
-            intent.putExtra("humedades", climaModel.humedades.toIntArray())
-            intent.putExtra("probabilidadesPrecipitacion", climaModel.probabilidadesPrecipitacion.toIntArray())
-            intent.putExtra("precipitaciones", climaModel.precipitaciones.toDoubleArray())
-            intent.putExtra("evapotranspiraciones", climaModel.evapotranspiraciones.toDoubleArray())
-            intent.putExtra("velocidadesViento", climaModel.velocidadesViento.toDoubleArray())
-            intent.putExtra("humedadesSuelo", climaModel.humedadesSuelo.toDoubleArray())
-            intent.putStringArrayListExtra("times", ArrayList(climaModel.times)) //evitar errores
+            intent.putExtra("temperaturas", clima.temperaturas.toDoubleArray())
+            intent.putExtra("humedades", clima.humedades.toIntArray())
+            intent.putExtra("probabilidadesPrecipitacion", clima.probabilidadesPrecipitacion.toIntArray())
+            intent.putExtra("precipitaciones", clima.precipitaciones.toDoubleArray())
+            intent.putExtra("evapotranspiraciones", clima.evapotranspiraciones.toDoubleArray())
+            intent.putExtra("velocidadesViento", clima.velocidadesViento.toDoubleArray())
+            intent.putExtra("humedadesSuelo", clima.humedadesSuelo.toDoubleArray())
+            intent.putStringArrayListExtra("times", ArrayList(clima.times)) //evitar errores
 
-            println(climaModel.times.toTypedArray())
+            println(clima.times.toTypedArray())
 
             startActivity(intent)
         }
@@ -121,11 +120,11 @@ class ClimaActivity : Navigation(), OnMapReadyCallback {
 
     @SuppressLint("StringFormatMatches")
     private suspend fun actualizarInterfaz() = withContext(Dispatchers.Main) {
-        binding.temperatureTextView.text = getString(R.string.temperature_text, climaModel.temperatura)
-        binding.humidityTextView.text = getString(R.string.humidity_text, climaModel.humedad)
-        binding.precipitationTextView.text = getString(R.string.precipitation_text, climaModel.precipitacion)
-        binding.windSpeedTextView.text = getString(R.string.wind_speed_text, climaModel.aparenteTemperatura)
-        binding.cloudCoverTextView.text = getString(R.string.cloud_cover_text, climaModel.nubosidad)
+        binding.temperatureTextView.text = getString(R.string.temperature_text, clima.temperatura)
+        binding.humidityTextView.text = getString(R.string.humidity_text, clima.humedad)
+        binding.precipitationTextView.text = getString(R.string.precipitation_text, clima.precipitacion)
+        binding.windSpeedTextView.text = getString(R.string.wind_speed_text, clima.aparenteTemperatura)
+        binding.cloudCoverTextView.text = getString(R.string.cloud_cover_text, clima.nubosidad)
     }
 
     private fun actualizarMapa(latitud: Double, longitud: Double) {

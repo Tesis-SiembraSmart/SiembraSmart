@@ -1,13 +1,13 @@
 package com.example.siembrasmart.controllers
 
 import android.util.Log
-import com.example.siembrasmart.models.ConsejosModel
+import com.example.siembrasmart.models.Consejos
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import org.json.JSONObject
 import java.io.IOException
 
-class ConsejosController(private val model: ConsejosModel) {
+class ConsejosController(private val model: Consejos) {
     private val client = OkHttpClient()
 
     fun makePredictionRequest(callback: (String) -> Unit) {

@@ -1,6 +1,6 @@
 package com.example.siembrasmart.models
 
-data class ConsejosModel(
+data class Consejos(
     var areaSembrada: Int = 0,
     var areaCosechada: Int = 0,
     var produccion: Int = 0,
