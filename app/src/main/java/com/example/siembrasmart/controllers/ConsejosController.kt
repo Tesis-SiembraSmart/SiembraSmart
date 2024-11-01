@@ -11,7 +11,7 @@ class ConsejosController(private val model: ConsejosModel) {
     private val client = OkHttpClient()
 
     fun makePredictionRequest(callback: (String) -> Unit) {
-        val url = "https://cacaomodel-f7dqaefrbpgzdjcd.brazilsouth-01.azurewebsites.net/predict"
+        val url = "http://18.224.151.11:8000/predict"
         Log.d("ConsejosController", "URL de la API: $url")
 
         // Crear el JSON con los datos
