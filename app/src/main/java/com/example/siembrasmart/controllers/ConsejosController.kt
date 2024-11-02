@@ -2,6 +2,8 @@ package com.example.siembrasmart.controllers
 
 import android.util.Log
 import com.example.siembrasmart.models.Consejos
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import org.json.JSONObject
@@ -9,12 +11,15 @@ import java.io.IOException
 
 class ConsejosController(private val model: Consejos) {
     private val client = OkHttpClient()
+    private val userRef = FirebaseDatabase.getInstance().reference.child("users")
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     fun makePredictionRequest(callback: (String) -> Unit) {
-        val url = "http://18.224.151.11:8000/predict"
+        // Replace the IP with your Render service URL
+        val url = "https://api-modelos.onrender.com/predict" // Replace with your actual URL
         Log.d("ConsejosController", "URL de la API: $url")
 
-        // Crear el JSON con los datos
+        // Create the JSON with the data
         val json = JSONObject().apply {
             put("Area_Sembrada", model.areaSembrada)
             put("Area_Cosechada", model.areaCosechada)
@@ -22,17 +27,17 @@ class ConsejosController(private val model: Consejos) {
         }
         Log.d("ConsejosController", "JSON de la solicitud: $json")
 
-        // Crear el cuerpo de la solicitud con JSON
+        // Create the request body with JSON
         val body = RequestBody.create("application/json; charset=utf-8".toMediaType(), json.toString())
 
-        // Crear la solicitud POST
+        // Create the POST request
         val request = Request.Builder()
             .url(url)
             .post(body)
             .build()
         Log.d("ConsejosController", "Solicitud POST creada")
 
-        // Ejecutar la solicitud
+        // Execute the request
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 Log.e("ConsejosController", "Error al realizar la solicitud: ${e.message}")

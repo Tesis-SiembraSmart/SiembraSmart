@@ -10,9 +10,9 @@ class StartFormController {
 
     private val database = Firebase.database.reference
 
-    fun saveSelectedModel(userId: String, selectedModel: String, callback: (Boolean) -> Unit) {
-        // Actualiza el campo modeloUsado del usuario
-        database.child("users").child(userId).child("modeloUsado").setValue(selectedModel)
+    fun saveSelectedModels(userId: String, selectedModels: List<String>, callback: (Boolean) -> Unit) {
+        // Actualiza el campo modeloUsado del usuario para almacenar múltiples modelos
+        database.child("users").child(userId).child("modelosUsados").setValue(selectedModels)
             .addOnSuccessListener {
                 // Llamar al callback con true si el guardado fue exitoso
                 callback(true)
@@ -22,4 +22,5 @@ class StartFormController {
                 callback(false)
             }
     }
+
 }

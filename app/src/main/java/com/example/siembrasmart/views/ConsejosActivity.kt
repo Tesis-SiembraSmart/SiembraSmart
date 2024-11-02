@@ -10,9 +10,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.example.siembrasmart.databinding.ActivityConsejosBinding
-import com.example.siembrasmart.utils.Navigation
 import com.example.siembrasmart.models.Consejos
 import com.example.siembrasmart.controllers.ConsejosController
+import com.example.siembrasmart.utils.Navigation
 
 class ConsejosActivity : Navigation() {
     private lateinit var auth: FirebaseAuth
@@ -39,12 +39,19 @@ class ConsejosActivity : Navigation() {
         setupBottomNavigationView(binding.bottomNavigation)
         setupToolbar(binding.toolbar)
 
-        // Referencias a los campos de entrada y botones
-        val areaSembradaInput: EditText = binding.etAreaSembrada
-        val areaCosechadaInput: EditText = binding.etAreaCosechada
-        val produccionInput: EditText = binding.etProduccion
-        val resultadoTextView: TextView = binding.tvResult
-        val predictButton: Button = binding.btnPredict
+        // Limpiar el contenedor antes de agregar el formulario para evitar superposición
+        binding.formularioContainer.removeAllViews()
+
+        // Inflar el formulario de cacao y agregarlo al formulario_container
+        val formularioCacaoView = layoutInflater.inflate(R.layout.formulario_cacao, binding.formularioContainer, false)
+        binding.formularioContainer.addView(formularioCacaoView)
+
+        // Referencias a los campos de entrada y botones en el formulario
+        val areaSembradaInput: EditText = formularioCacaoView.findViewById(R.id.etAreaSembrada)
+        val areaCosechadaInput: EditText = formularioCacaoView.findViewById(R.id.etAreaCosechada)
+        val produccionInput: EditText = formularioCacaoView.findViewById(R.id.etProduccion)
+        val resultadoTextView: TextView = formularioCacaoView.findViewById(R.id.tvResult)
+        val predictButton: Button = formularioCacaoView.findViewById(R.id.btnPredict)
 
         // Configurar el botón para realizar la predicción
         predictButton.setOnClickListener {

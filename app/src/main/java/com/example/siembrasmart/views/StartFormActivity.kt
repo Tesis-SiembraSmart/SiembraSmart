@@ -24,27 +24,41 @@ class StartFormActivity : AppCompatActivity() {
 
         binding.acceptButton.setOnClickListener {
             if (userId != null) {
-                val selectedModel = when {
-                    binding.radioButton1.isChecked -> "Modelo 1"
-                    binding.radioButton2.isChecked -> "Modelo 2"
-                    binding.radioButton3.isChecked -> "Modelo 3"
-                    binding.radioButton4.isChecked -> "Modelo 4"
-                    else -> ""
-                }
+                // Lista para almacenar los modelos seleccionados
+                val selectedModels = mutableListOf<String>()
 
-                if (selectedModel.isNotEmpty()) {
-                    controller.saveSelectedModel(userId, selectedModel) {
-                        if (it) {
-                            Toast.makeText(this, "Opción guardada correctamente.", Toast.LENGTH_SHORT).show()
+                // Añade los modelos seleccionados a la lista
+                if (binding.CheckBox1.isChecked) selectedModels.add("Modelo cacao")
+                if (binding.CheckBox2.isChecked) selectedModels.add("Modelo cafe")
+                if (binding.CheckBox3.isChecked) selectedModels.add("Modelo 3")
+                if (binding.CheckBox4.isChecked) selectedModels.add("Modelo 4")
+
+                // Verifica si al menos una opción está seleccionada
+                if (selectedModels.isNotEmpty()) {
+                    controller.saveSelectedModels(userId, selectedModels) { success ->
+                        if (success) {
+                            Toast.makeText(
+                                this,
+                                "Opciones guardadas correctamente.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             val intent = Intent(this, RegistroCultivoActivity::class.java)
                             startActivity(intent)
                             finish()
                         } else {
-                            Toast.makeText(this, "Error al guardar la opción.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                "Error al guardar las opciones.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 } else {
-                    Toast.makeText(this, "Por favor selecciona una opción", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Por favor selecciona al menos una opción",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }

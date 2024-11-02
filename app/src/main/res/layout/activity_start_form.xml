@@ -22,17 +22,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <ImageButton
-                android:id="@+id/backbutton"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Botón atras"
-                android:src="@drawable/arrow_back"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.023" />
 
             <!-- Title -->
             <TextView
@@ -41,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:gravity="center"
-                android:text="¡Escoge tu objetivo!"
+                android:text="¡Escoge tus objetivos!"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textStyle="bold" />
 
@@ -61,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- Card 1 with RadioButton -->
+                <!-- Card 1 with CheckBox -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -75,8 +64,8 @@
                         android:orientation="horizontal"
                         android:padding="16dp">
 
-                        <RadioButton
-                            android:id="@+id/radioButton1"
+                        <CheckBox
+                            android:id="@+id/CheckBox1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
@@ -93,7 +82,7 @@
                                 android:id="@+id/cardTitle1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Opción 1"
+                                android:text="Cacao"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                 android:textStyle="bold"
                                 android:layout_marginBottom="4dp" />
@@ -102,7 +91,7 @@
                                 android:id="@+id/cardDescription1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Descripción de la opción 1"
+                                android:text="El modelo predice toneladas por hectárea (t/ha) usando: Área Sembrada, Área Cosechada y Producción"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
                         </LinearLayout>
 
@@ -111,12 +100,12 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/ic_launcher_foreground"
+                            android:src="@drawable/cacao"
                             android:contentDescription="Logo Opción 1" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Card 2 with RadioButton -->
+                <!-- Card 2 with CheckBox -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -130,8 +119,8 @@
                         android:orientation="horizontal"
                         android:padding="16dp">
 
-                        <RadioButton
-                            android:id="@+id/radioButton2"
+                        <CheckBox
+                            android:id="@+id/CheckBox2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
@@ -148,7 +137,7 @@
                                 android:id="@+id/cardTitle2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Opción 2"
+                                android:text="Café"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                 android:textStyle="bold"
                                 android:layout_marginBottom="4dp" />
@@ -157,7 +146,7 @@
                                 android:id="@+id/cardDescription2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Descripción de la opción 2"
+                                android:text="El modelo predice los kilos (kg) usando: áreas, costos de mejoras, insumos y maquinaria, además de datos de cosecha, ventas y pérdidas"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
                         </LinearLayout>
 
@@ -166,12 +155,12 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/ic_launcher_foreground"
+                            android:src="@drawable/cafe"
                             android:contentDescription="Logo Opción 2" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Card 3 with RadioButton -->
+                <!-- Card 3 with CheckBox -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -185,8 +174,8 @@
                         android:orientation="horizontal"
                         android:padding="16dp">
 
-                        <RadioButton
-                            android:id="@+id/radioButton3"
+                        <CheckBox
+                            android:id="@+id/CheckBox3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
@@ -226,7 +215,7 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Card 1 with RadioButton -->
+                <!-- Card 1 with CheckBox -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -240,8 +229,8 @@
                         android:orientation="horizontal"
                         android:padding="16dp">
 
-                        <RadioButton
-                            android:id="@+id/radioButton4"
+                        <CheckBox
+                            android:id="@+id/CheckBox4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""

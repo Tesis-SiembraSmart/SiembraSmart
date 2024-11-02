@@ -5,6 +5,6 @@ data class Usuario(
     var lastName: String = "",
     var email: String = "",
     var phoneNumber: String = "",
-    var modeloUsado: String = "",
+    var modelosUsados: List<String> = emptyList(),
     var cultivos: List<Cultivo> = emptyList()
 )

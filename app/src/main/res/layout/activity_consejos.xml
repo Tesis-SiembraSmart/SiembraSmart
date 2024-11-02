@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -22,95 +21,24 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Contenido principal -->
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Predicción de Rendimiento de Cacao"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp"
+    <!-- Contenedor principal donde se inflará formulario_cacao.xml -->
+    <FrameLayout
+        android:id="@+id/formulario_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Campo para Área Sembrada -->
-    <EditText
-        android:id="@+id/etAreaSembrada"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Área Sembrada (ha)"
-        android:inputType="number"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
-
-    <!-- Campo para Área Cosechada -->
-    <EditText
-        android:id="@+id/etAreaCosechada"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Área Cosechada (ha)"
-        android:inputType="number"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etAreaSembrada" />
-
-    <!-- Campo para Producción -->
-    <EditText
-        android:id="@+id/etProduccion"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Producción (t)"
-        android:inputType="number"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etAreaCosechada" />
-
-    <!-- Botón para realizar la predicción -->
-    <Button
-        android:id="@+id/btnPredict"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Calcular Rendimiento"
-        android:textColor="@android:color/white"
-        android:backgroundTint="@color/verde_icon"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/etProduccion"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Resultado de la predicción -->
-    <TextView
-        android:id="@+id/tvResult"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:text="Esperando predicción..."
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnPredict" />
 
     <!-- Bottom Navigation View -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:background="@color/white"
         app:itemIconSize="32dp"
         app:itemIconTint="@color/verde_icon"
