@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="16dp">
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Predicción de Rendimiento de Café"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"
+        android:gravity="center" />
+
+    <!-- ScrollView para hacer desplazable el contenido del formulario -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <EditText
+                android:id="@+id/etCoffeeAcreage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Área de Café (ha)"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                android:id="@+id/etCoffeeImprovedAcreage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Área Mejorada de Café (ha)"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                android:id="@+id/etCoffeeImprovedCost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Costo Mejorado de Café"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                android:id="@+id/etCoffeeAcreageFertilizer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Área Fertilizada de Café (ha)"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                android:id="@+id/etCoffeeFertilizerCost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Costo de Fertilizante para Café"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                android:id="@+id/etCoffeeChemicalAcreage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Área de Químicos para Café (ha)"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                android:id="@+id/etCoffeeChemicalCost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Costo de Químicos para Café"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                android:id="@+id/etCoffeeMachineryAcreage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Área de Maquinaria para Café (ha)"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                android:id="@+id/etCoffeeMachineryCost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Costo de Maquinaria para Café"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                android:id="@+id/etCoffeeHarvested"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Café Cosechado"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                android:id="@+id/etCoffeeSoldPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Precio de Venta de Café"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                android:id="@+id/etCoffeeHarvestLoss"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Pérdida en la Cosecha de Café"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Botón para realizar la predicción -->
+    <Button
+        android:id="@+id/btnPredictCoffee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calcular Predicción"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/verde_icon" />
+
+    <!-- Resultado de la predicción -->
+    <TextView
+        android:id="@+id/tvResultCoffee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Esperando predicción..."
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center" />
+
+</LinearLayout>

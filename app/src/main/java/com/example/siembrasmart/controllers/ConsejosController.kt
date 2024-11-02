@@ -1,34 +1,30 @@
 package com.example.siembrasmart.controllers
 
+import android.R
 import android.util.Log
-import com.example.siembrasmart.models.Consejos
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import org.json.JSONObject
 import java.io.IOException
 
-class ConsejosController(private val model: Consejos) {
+class ConsejosController {
     private val client = OkHttpClient()
-    private val userRef = FirebaseDatabase.getInstance().reference.child("users")
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
-    fun makePredictionRequest(callback: (String) -> Unit) {
+    fun makePredictionRequest(data: JSONObject, callback: (String) -> Unit) {
         // Replace the IP with your Render service URL
         val url = "https://api-modelos.onrender.com/predict" // Replace with your actual URL
         Log.d("ConsejosController", "URL de la API: $url")
 
-        // Create the JSON with the data
-        val json = JSONObject().apply {
-            put("Area_Sembrada", model.areaSembrada)
-            put("Area_Cosechada", model.areaCosechada)
-            put("Produccion", model.produccion)
-        }
-        Log.d("ConsejosController", "JSON de la solicitud: $json")
-
         // Create the request body with JSON
-        val body = RequestBody.create("application/json; charset=utf-8".toMediaType(), json.toString())
+        val body = RequestBody.create("application/json; charset=utf-8".toMediaType(), data.toString())
 
         // Create the POST request
         val request = Request.Builder()
@@ -50,10 +46,10 @@ class ConsejosController(private val model: Consejos) {
                 if (responseBody != null) {
                     Log.d("ConsejosController", "Respuesta del servidor: $responseBody")
                     val jsonResponse = JSONObject(responseBody)
-                    model.rendimientoPredicho = jsonResponse.optDouble("Rendimiento_Predicho", Double.NaN)
+                    val rendimientoPredicho = jsonResponse.optDouble("Rendimiento_Predicho", Double.NaN)
 
-                    if (!model.rendimientoPredicho.isNaN()) {
-                        callback("Rendimiento Predicho: ${model.rendimientoPredicho}")
+                    if (!rendimientoPredicho.isNaN()) {
+                        callback("Rendimiento Predicho: $rendimientoPredicho")
                     } else {
                         callback("Error en el análisis de la respuesta")
                     }
@@ -62,5 +58,42 @@ class ConsejosController(private val model: Consejos) {
                 }
             }
         })
+    }
+
+    // Configuración del spinner para seleccionar modelos
+    fun configurarSpinner(
+        userId: String,
+        spinner: Spinner,
+        onItemSelected: (String) -> Unit
+    ) {
+        database.child("users").child(userId).child("modelosUsados").get().addOnSuccessListener { dataSnapshot ->
+            val modelosUsados = dataSnapshot.children.mapNotNull { it.getValue(String::class.java) }
+            val cultivos = modelosUsados.map { modelo ->
+                modelo.split(" ").getOrElse(1) { modelo }
+            }
+
+            // Crear un ArrayAdapter usando el listado de cultivos extraídos
+            val context = spinner.context
+            val adaptador = ArrayAdapter(
+                context,
+                R.layout.simple_spinner_item,
+                cultivos
+            ).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+
+            spinner.adapter = adaptador
+
+            // Establecer el listener para el Spinner
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                    onItemSelected(cultivos[position])
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                    // No se necesita acción aquí
+                }
+            }
+        }
     }
 }
