@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import com.example.siembrasmart.MainActivity
 import com.example.siembrasmart.R
 import com.example.siembrasmart.databinding.ActivityAlertBinding
 import com.example.siembrasmart.models.Alertas
@@ -32,18 +31,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import android.graphics.Color
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.cardview.widget.CardView
 
 class AlertActivity : Navigation() {
     private lateinit var binding: ActivityAlertBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var alertController: AlertController
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
-    var times: MutableList<String> = mutableListOf()
-    var descargaRioMax: MutableList<Double> = mutableListOf()
-    var descargaRioMedia: MutableList<Double> = mutableListOf()
-    var descargaRioMin: MutableList<Double> = mutableListOf()
-    private var totalAlertas = 0
     private lateinit var calendar: Calendar
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,17 +56,16 @@ class AlertActivity : Navigation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         createNotificationChannel()
-        // Al hacer click, se muestra un DatePicker para seleccionar la fecha de la alarma
+
+        // Configuración de botones y adaptadores
         binding.datePickerButton.setOnClickListener {
             showDatePickerDialog()
         }
-        // Al hacer click, se muestra un TimePicker para seleccionar la hora de la alarma
+
         binding.timePickerButton.setOnClickListener {
             showTimePickerDialog()
         }
 
-
-        // Agregamos opciones de frecuencia
         val frequencies = arrayOf("Diaria", "Semanal", "Cada 2 días")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, frequencies)
         binding.frequencySpinner.adapter = adapter
@@ -76,46 +74,102 @@ class AlertActivity : Navigation() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
+                } else {
+                    scheduleCustomNotification()
                 }
+            } else {
+                scheduleCustomNotification()
             }
+        }
+
+        // Actualizar alertas cuando los switches cambien de estado
+        binding.switchAlertRed.setOnCheckedChangeListener { _, _ ->
             getLocationAndFetchData()
-            // scheduleCustomNotification()  // Se llama a la nueva función
         }
 
-
-        binding.switchAlertRed.setOnCheckedChangeListener { _, isChecked ->
-            binding.alertTextViewRed.visibility = if (isChecked) View.VISIBLE else View.GONE
+        binding.switchAlertYellow.setOnCheckedChangeListener { _, _ ->
+            getLocationAndFetchData()
         }
 
-        // Switch para la alerta amarilla de inundación
-        binding.switchAlertYellow.setOnCheckedChangeListener { _, isChecked ->
-            binding.alertTextViewYellow.visibility = if (isChecked) View.VISIBLE else View.GONE
+        binding.switchAlertDroughtRed.setOnCheckedChangeListener { _, _ ->
+            getLocationAndFetchData()
         }
 
-        // Switch para la alerta roja de sequía
-        binding.switchAlertDroughtRed.setOnCheckedChangeListener { _, isChecked ->
-            binding.alertTextViewDroughtRed.visibility = if (isChecked) View.VISIBLE else View.GONE
+        binding.switchAlertDroughtYellow.setOnCheckedChangeListener { _, _ ->
+            getLocationAndFetchData()
         }
 
-        // Switch para la alerta amarilla de sequía
-        binding.switchAlertDroughtYellow.setOnCheckedChangeListener { _, isChecked ->
-            binding.alertTextViewDroughtYellow.visibility = if (isChecked) View.VISIBLE else View.GONE
-        }
-
-        // Navegación inferior
+        // Navegación inferior y Toolbar
         binding.bottomNavigation.selectedItemId = R.id.navigation_notificacion
         setupBottomNavigationView(binding.bottomNavigation)
-        // Configuración de la Toolbar
         setupToolbar(binding.toolbar)
 
-
+        // Cargar las alertas al iniciar la actividad
+        getLocationAndFetchData()
     }
 
     private fun getLocationAndFetchData() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 location?.let {
-                    fetchWeatherData(it.latitude, it.longitude)
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        alertController.fetchWeatherData(it.latitude, it.longitude) { alertas ->
+                            runOnUiThread {
+                                // Limpiar los contenedores de alertas antes de agregar nuevas
+                                binding.alertsContainerInundacionRoja.removeAllViews()
+                                binding.alertsContainerInundacionAmarilla.removeAllViews()
+                                binding.alertsContainerSequiaRoja.removeAllViews()
+                                binding.alertsContainerSequiaAmarilla.removeAllViews()
+
+                                // Agregar alertas de inundación roja si el switch está activado
+                                if (binding.switchAlertRed.isChecked) {
+                                    addAlertsToContainer(
+                                        alertas.alertaInundacionRoja,
+                                        "🌊",
+                                        "#B71C1C",
+                                        "#FFCDD2",
+                                        binding.alertsContainerInundacionRoja
+                                    )
+                                }
+
+                                // Agregar alertas de inundación amarilla
+                                if (binding.switchAlertYellow.isChecked) {
+                                    addAlertsToContainer(
+                                        alertas.alertaInundacionAmarilla,
+                                        "💧",
+                                        "#A84F00",
+                                        "#FFF9C4",
+                                        binding.alertsContainerInundacionAmarilla
+                                    )
+                                }
+
+                                // Agregar alertas de sequía roja
+                                if (binding.switchAlertDroughtRed.isChecked) {
+                                    addAlertsToContainer(
+                                        alertas.alertaSequíaRoja,
+                                        "🌵",
+                                        "#3E2723",
+                                        "#D7CCC8",
+                                        binding.alertsContainerSequiaRoja
+                                    )
+                                }
+
+                                // Agregar alertas de sequía amarilla
+                                if (binding.switchAlertDroughtYellow.isChecked) {
+                                    addAlertsToContainer(
+                                        alertas.alertaSequíaAmarilla,
+                                        "☀️",
+                                        "#5D4037",
+                                        "#EFEBE9",
+                                        binding.alertsContainerSequiaAmarilla
+                                    )
+                                }
+
+                                // Mostrar mensaje si no hay alertas en cada sección
+                                handleEmptyContainers()
+                            }
+                        }
+                    }
                 } ?: run {
                     // Manejar caso de ubicación nula
                 }
@@ -124,154 +178,142 @@ class AlertActivity : Navigation() {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 2)
         }
     }
-
-    private fun fetchWeatherData(latitud: Double, longitud: Double) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val today = Calendar.getInstance()
-            val startDate = today.clone() as Calendar
-            startDate.add(Calendar.DAY_OF_YEAR, -658)
-            val endDate = today.clone() as Calendar
-            endDate.add(Calendar.DAY_OF_YEAR, 72)
-
-            val startDateString = dateFormat.format(startDate.time)
-            val endDateString = dateFormat.format(endDate.time)
-
-            alertController.fetchDatosOpenMeteo(latitud, longitud, startDateString, endDateString) { json ->
-                json?.let {
-                    val dailyData = it.getJSONObject("daily")
-
-                    // Limpiamos las listas antes de agregar los nuevos datos
-                    times.clear()
-                    descargaRioMax.clear()
-                    descargaRioMedia.clear()
-                    descargaRioMin.clear()
-
-                    val allTimes = alertController.jsonArrayToStringList(dailyData.getJSONArray("time"))
-                    val allDescargaRioMax = alertController.jsonArrayToDoubleList(dailyData.getJSONArray("river_discharge_max"))
-                    val allDescargaRioMedia = alertController.jsonArrayToDoubleList(dailyData.getJSONArray("river_discharge_mean"))
-                    val allDescargaRioMin = alertController.jsonArrayToDoubleList(dailyData.getJSONArray("river_discharge_min"))
-
-                    filterDataFromToday(allTimes, allDescargaRioMax, allDescargaRioMedia, allDescargaRioMin)
-
-                    val maxThresholdRed = calculateThresholdRed(descargaRioMax)
-                    val meanThresholdYellow = calculateThresholdYellow(descargaRioMedia)
-                    val droughtThresholdRed = calculateDroughtThresholdRed(descargaRioMin)
-                    val droughtThresholdYellow = calculateDroughtThresholdYellow(descargaRioMin)
-
-                    val alertas = generateFloodAndDroughtAlerts(
-                        descargaRioMax,
-                        descargaRioMedia,
-                        descargaRioMin,
-                        maxThresholdRed,
-                        meanThresholdYellow,
-                        droughtThresholdRed,
-                        droughtThresholdYellow
-                    )
-
-                    runOnUiThread {
-                        // Limpiamos los TextViews antes de añadir las alertas
-                        binding.alertTextViewRed.text = ""
-                        binding.alertTextViewYellow.text = ""
-                        binding.alertTextViewDroughtRed.text = ""
-                        binding.alertTextViewDroughtYellow.text = ""
-
-                        // Ahora actualizamos con las nuevas alertas
-                        binding.alertTextViewRed.text = alertas.alertaInundacionRoja
-                        binding.alertTextViewYellow.text = alertas.alertaInundacionAmarilla
-                        binding.alertTextViewDroughtRed.text = alertas.alertaSequíaRoja
-                        binding.alertTextViewDroughtYellow.text = alertas.alertaSequíaAmarilla
-                    }
-                }
-            }
-            scheduleCustomNotification()
-        }
-    }
-
-
-    private fun filterDataFromToday(
-        allTimes: MutableList<String>,
-        allDescargaRioMax: MutableList<Double>,
-        allDescargaRioMedia: MutableList<Double>,
-        allDescargaRioMin: MutableList<Double>
+    private fun addAlertsToContainer(
+        alertsString: String,
+        icon: String,
+        iconColor: String,
+        backgroundColor: String,
+        container: LinearLayout
     ) {
-        val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-        for (i in allTimes.indices) {
-            if (allTimes[i] >= today) {
+        val alerts = alertsString.trim().split("\n")
+        for (alert in alerts) {
+            if (alert.isNotBlank()) {
+                // Inflar el layout de la tarjeta de alerta
+                val alertView = LayoutInflater.from(this).inflate(R.layout.alert_card, container, false)
 
-                times.add(allTimes[i])
-                descargaRioMax.add(allDescargaRioMax[i])
-                descargaRioMedia.add(allDescargaRioMedia[i])
-                descargaRioMin.add(allDescargaRioMin[i])
+                // Configurar el icono
+                val alertIcon = alertView.findViewById<TextView>(R.id.alertIcon)
+                alertIcon.text = icon
+                alertIcon.setTextColor(Color.parseColor(iconColor))
+
+                // Configurar el texto de la alerta
+                val alertText = alertView.findViewById<TextView>(R.id.alertText)
+                alertText.text = alert
+
+                // Configurar el color de fondo de la tarjeta
+                val cardView = alertView.findViewById<CardView>(R.id.alertCardView)
+                cardView.setCardBackgroundColor(Color.parseColor(backgroundColor))
+
+                // Agregar la vista al contenedor
+                container.addView(alertView)
             }
         }
     }
 
-    private fun generateFloodAndDroughtAlerts(
-        dischargeMax: MutableList<Double>,
-        dischargeMean: MutableList<Double>,
-        dischargeMin: MutableList<Double>,
-        maxThresholdRed: Double,
-        meanThresholdYellow: Double,
-        droughtThresholdRed: Double,
-        droughtThresholdYellow: Double
-    ): Alertas {
-        val inundacionRoja = StringBuilder()
-        val inundacionAmarilla = StringBuilder()
-        val sequiaRoja = StringBuilder()
-        val sequiaAmarilla = StringBuilder()
-
-        var inundacionRojaCount = 0
-        var inundacionAmarillaCount = 0
-        var sequiaRojaCount = 0
-        var sequiaAmarillaCount = 0
-
-        for (i in dischargeMax.indices) {
-            if (dischargeMax[i] > maxThresholdRed) {
-                inundacionRoja.append("¡Predicción de Alerta Roja de Inundación! El ${times[i]}, la descarga máxima del río se estima en ${dischargeMax[i]} m³/s.\n")
-                inundacionRojaCount++
-            } else if (dischargeMean[i] > meanThresholdYellow) {
-                inundacionAmarilla.append("Predicción de Alerta Amarilla de Inundación: El ${times[i]}, se estima que la descarga media del río será de ${dischargeMean[i]} m³/s.\n")
-                inundacionAmarillaCount++
+    private fun handleEmptyContainers() {
+        // Inundación Roja
+        if (binding.alertsContainerInundacionRoja.childCount == 0) {
+            val message: String
+            val icon: String
+            val iconColor: String
+            val backgroundColor: String
+            if (binding.switchAlertRed.isChecked) {
+                message = "No hay alertas de inundación roja en este momento."
+                icon = "🌊"
+                iconColor = "#B71C1C"
+                backgroundColor = "#FFCDD2"
+            } else {
+                message = "Alerta de inundación roja oculta."
+                icon = "🙈"
+                iconColor = "#B71C1C"
+                backgroundColor = "#FFCDD2"
             }
-
-            if (dischargeMin[i] < droughtThresholdRed) {
-                sequiaRoja.append("¡Predicción de Alerta Roja de Sequía! El ${times[i]}, se espera que la descarga mínima del río sea de ${dischargeMin[i]} m³/s.\n")
-                sequiaRojaCount++
-            } else if (dischargeMin[i] < droughtThresholdYellow) {
-                sequiaAmarilla.append("Predicción de Alerta Amarilla de Sequía: El ${times[i]}, se estima que la descarga mínima del río será de ${dischargeMin[i]} m³/s.\n")
-                sequiaAmarillaCount++
-            }
+            addAlertsToContainer(
+                message,
+                icon,
+                iconColor,
+                backgroundColor,
+                binding.alertsContainerInundacionRoja
+            )
         }
 
-        totalAlertas = inundacionRojaCount + inundacionAmarillaCount + sequiaRojaCount + sequiaAmarillaCount
-
-        return Alertas(
-            alertaInundacionRoja = inundacionRoja.toString(),
-            alertaInundacionAmarilla = inundacionAmarilla.toString(),
-            alertaSequíaRoja = sequiaRoja.toString(),
-            alertaSequíaAmarilla = sequiaAmarilla.toString()
-        )
-    }
-
-    private fun calculateThresholdRed(descargaRioMax: MutableList<Double>): Double {
-        return descargaRioMax.maxOrNull()?.times(0.9) ?: 150.0
-    }
-
-    private fun calculateThresholdYellow(descargaRioMedia: MutableList<Double>): Double {
-        return if (descargaRioMedia.isNotEmpty()) {
-            descargaRioMedia.average().times(1.1)
-        } else {
-            100.0
+        // Inundación Amarilla
+        if (binding.alertsContainerInundacionAmarilla.childCount == 0) {
+            val message: String
+            val icon: String
+            val iconColor: String
+            val backgroundColor: String
+            if (binding.switchAlertYellow.isChecked) {
+                message = "No hay alertas de inundación amarilla en este momento."
+                icon = "💧"
+                iconColor = "#A84F00"
+                backgroundColor = "#FFF9C4"
+            } else {
+                message = "Alerta de inundación amarilla oculta."
+                icon = "🙈"
+                iconColor = "#A84F00"
+                backgroundColor = "#FFF9C4"
+            }
+            addAlertsToContainer(
+                message,
+                icon,
+                iconColor,
+                backgroundColor,
+                binding.alertsContainerInundacionAmarilla
+            )
         }
-    }
 
-    private fun calculateDroughtThresholdRed(descargaRioMin: MutableList<Double>): Double {
-        return descargaRioMin.minOrNull()?.times(1.1) ?: 70.0
-    }
+        // Sequía Roja
+        if (binding.alertsContainerSequiaRoja.childCount == 0) {
+            val message: String
+            val icon: String
+            val iconColor: String
+            val backgroundColor: String
+            if (binding.switchAlertDroughtRed.isChecked) {
+                message = "No hay alertas de sequía roja en este momento."
+                icon = "🌵"
+                iconColor = "#3E2723"
+                backgroundColor = "#D7CCC8"
+            } else {
+                message = "Alerta de sequía roja oculta."
+                icon = "🙈"
+                iconColor = "#3E2723"
+                backgroundColor = "#D7CCC8"
+            }
+            addAlertsToContainer(
+                message,
+                icon,
+                iconColor,
+                backgroundColor,
+                binding.alertsContainerSequiaRoja
+            )
+        }
 
-    private fun calculateDroughtThresholdYellow(descargaRioMin: MutableList<Double>): Double {
-        return descargaRioMin.average().times(1.2)
+        // Sequía Amarilla
+        if (binding.alertsContainerSequiaAmarilla.childCount == 0) {
+            val message: String
+            val icon: String
+            val iconColor: String
+            val backgroundColor: String
+            if (binding.switchAlertDroughtYellow.isChecked) {
+                message = "No hay alertas de sequía amarilla en este momento."
+                icon = "☀️"
+                iconColor = "#5D4037"
+                backgroundColor = "#EFEBE9"
+            } else {
+                message = "Alerta de sequía amarilla oculta."
+                icon = "🙈"
+                iconColor = "#5D4037"
+                backgroundColor = "#EFEBE9"
+            }
+            addAlertsToContainer(
+                message,
+                icon,
+                iconColor,
+                backgroundColor,
+                binding.alertsContainerSequiaAmarilla
+            )
+        }
     }
 
     private fun showAlert(time: Long, title: String, message: String) {
@@ -280,17 +322,17 @@ class AlertActivity : Navigation() {
         val timeFormat = android.text.format.DateFormat.getTimeFormat(applicationContext)
 
         AlertDialog.Builder(this)
-            .setTitle("Notification Scheduled")
+            .setTitle("Notificación Programada")
             .setMessage(
-                "Title: $title\nMessage: $message\nAt: ${dateFormat.format(date)} ${timeFormat.format(date)}"
+                "Título: $title\nMensaje: $message\nEn: ${dateFormat.format(date)} ${timeFormat.format(date)}"
             )
-            .setPositiveButton("Okay") { _, _ -> }
+            .setPositiveButton("Aceptar") { _, _ -> }
             .show()
     }
 
     private fun createNotificationChannel() {
         val name = "canal de notificaciones"
-        val desc = "notificaciones para catastrofes"
+        val desc = "notificaciones para catástrofes"
         val importance = NotificationManager.IMPORTANCE_DEFAULT
         val channel = NotificationChannel(channelID, name, importance)
         channel.description = desc
@@ -303,7 +345,6 @@ class AlertActivity : Navigation() {
 
         val title = "Recordatorio de Alerta"
 
-        // Genera un mensaje de notificación activa
         val notificationMessage = when (binding.frequencySpinner.selectedItem.toString()) {
             "Diaria" -> "¡Alerta diaria! Revisa los datos importantes a las ${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)} cada día."
             "Semanal" -> "¡Alerta semanal! Te recordamos revisar los datos a las ${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)} cada semana."
@@ -311,7 +352,6 @@ class AlertActivity : Navigation() {
             else -> "Tienes una alerta activa."
         }
 
-        // Se configura la información de la notificación activa
         intent.putExtra(titleExtra, title)
         intent.putExtra(messageExtra, notificationMessage)
 
@@ -324,7 +364,6 @@ class AlertActivity : Navigation() {
 
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        // Configura la alerta de acuerdo a la frecuencia seleccionada
         when (binding.frequencySpinner.selectedItem.toString()) {
             "Diaria" -> {
                 alarmManager.setRepeating(
@@ -352,17 +391,8 @@ class AlertActivity : Navigation() {
             }
         }
 
-        // Genera un mensaje de programación de la alerta
-        val programMessage = when (binding.frequencySpinner.selectedItem.toString()) {
-            "Diaria" -> "Alerta diaria programada a las ${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)} todos los días."
-            "Semanal" -> "Alerta semanal programada a las ${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)} cada semana."
-            "Cada 2 días" -> "Alerta cada 2 días programada a las ${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)}."
-            else -> "Alerta programada."
-        }
-
-        // Mostrar el mensaje de que la alerta se ha programado
         lifecycleScope.launch(Dispatchers.Main) {
-            showAlert(calendar.timeInMillis, "Alerta Programada", programMessage)
+            showAlert(calendar.timeInMillis, "Alerta Programada", notificationMessage)
         }
     }
 
@@ -370,7 +400,6 @@ class AlertActivity : Navigation() {
         val datePicker = DatePickerDialog(
             this,
             { _, year, month, dayOfMonth ->
-                // Actualiza la fecha en el calendario
                 calendar.set(Calendar.YEAR, year)
                 calendar.set(Calendar.MONTH, month)
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
@@ -381,21 +410,19 @@ class AlertActivity : Navigation() {
         )
         datePicker.show()
     }
+
     private fun showTimePickerDialog() {
         val timePicker = TimePickerDialog(
             this,
             { _, hourOfDay, minute ->
-                // Actualiza la hora en el calendario
                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
                 calendar.set(Calendar.MINUTE, minute)
-                calendar.set(Calendar.SECOND, 0)  // Opcionalmente establecer los segundos en 0
+                calendar.set(Calendar.SECOND, 0)
             },
             calendar.get(Calendar.HOUR_OF_DAY),
             calendar.get(Calendar.MINUTE),
-            true  // Usa formato 24 horas
+            true
         )
         timePicker.show()
     }
-
-
 }
