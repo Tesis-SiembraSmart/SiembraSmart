@@ -1,27 +1,40 @@
 package com.example.siembrasmart.views
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.siembrasmart.R
 import com.example.siembrasmart.controllers.RegistroCultivoController
 import com.example.siembrasmart.databinding.ActivityRegistroCultivoBinding
 import com.example.siembrasmart.models.Cultivo
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
 import java.util.Date
+import java.util.Locale
 
 class RegistroCultivoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegistroCultivoBinding
-    private val controller = RegistroCultivoController()
+    private val controller = RegistroCultivoController(this)
     private var selectedDate: Date? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistroCultivoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Inicializar el proveedor de ubicación en el controlador
+        controller.initializeLocationProvider()
+
+        // Configurar el Spinner desde el controlador
+        controller.setupCultivoSpinner(binding.nombreCultivoSpinner)
+
+        // Obtener ubicación desde el controlador y actualizar la UI
+        controller.obtenerUbicacionActual { latitud, longitud ->
+            binding.latitudCultivo.text = latitud.toString()
+            binding.longitudCultivo.text = longitud.toString()
+        }
 
         binding.fechaInicioButton.setOnClickListener {
             showDatePickerDialog()
@@ -50,7 +63,7 @@ class RegistroCultivoActivity : AppCompatActivity() {
     }
 
     private fun saveCultivo() {
-        val nombre = binding.nombreCultivo.text.toString()
+        val nombre = binding.nombreCultivoSpinner.selectedItem.toString()
         val tipo = binding.tipoCultivo.text.toString()
         val latitud = binding.latitudCultivo.text.toString().toDoubleOrNull() ?: 0.0
         val longitud = binding.longitudCultivo.text.toString().toDoubleOrNull() ?: 0.0
@@ -71,7 +84,6 @@ class RegistroCultivoActivity : AppCompatActivity() {
         controller.saveCultivoForCurrentUser(cultivo) { success ->
             if (success) {
                 Toast.makeText(this, "Cultivo guardado con éxito", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, ClimaActivity::class.java))
                 finish()
             } else {
                 Toast.makeText(this, "Error al guardar cultivo", Toast.LENGTH_SHORT).show()
