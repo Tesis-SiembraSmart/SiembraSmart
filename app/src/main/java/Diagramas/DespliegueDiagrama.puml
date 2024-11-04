@@ -1,0 +1,73 @@
+@startuml
+node "Dispositivo del Agricultor" as Device {
+    node "Aplicación Móvil" as App {
+        component "SignupActivity" as SA
+        component "RegistroCultivoActivity" as RCA
+        component "ClimaActivity" as CA
+        component "AlertActivity" as AA
+        component "NewsActivity" as NA
+        component "UserProfileActivity" as UPA
+        component "ConsejosActivity" as CnA
+        component "ClimaController" as CC
+        component "NewsController" as NC
+        component "SignupController" as SC
+        component "RegistroCultivoController" as RCC
+        component "UserProfileController" as UPC
+        component "AlertController" as AC
+        component "ConsejosController" as CnC
+
+        SA --> SC : "Verificar credenciales"
+        RCA --> RCC : "Registrar cultivo"
+        CA --> CC : "Obtener datos de clima"
+        NA --> NC : "Filtrar y visualizar noticias"
+        AA --> AC : "Configurar alertas personalizadas"
+        UPA --> UPC : "Guardar cambios de perfil"
+        CnA --> CnC : "Solicitar predicciones de rendimiento"
+    }
+}
+
+cloud "Servicios de Firebase" as Firebase {
+    component "FirebaseAuth" as Auth
+    component "FirebaseDatabase" as DB
+}
+
+cloud "API de Open Meteo" as OpenMeteo {
+    component "API Clima" as WeatherAPI
+    component "API Alertas" as AlertsAPI
+}
+
+cloud "Servicio de Modelos en Render" as Render {
+    component "API Modelos" as ModelsAPI
+    component "Conexión a GitHub" as GitHubConnector
+}
+
+cloud "Repositorio de Modelos en GitHub" as GitHub {
+    component "Modelos de Predicción" as PredictionModels
+}
+
+cloud "API de Google Maps" as GoogleMaps {
+    component "API Mapas" as MapsAPI
+}
+
+Device -up-> Firebase : "Conexión a Internet"
+App --> Auth : "Autenticación de usuario"
+SC --> Auth : "signInWithEmailAndPassword()"
+App --> DB : "Almacenamiento y recuperación de datos de usuario"
+RCC --> DB : "Guardar/Actualizar Cultivo"
+UPC --> DB : "Guardar cambios de perfil"
+CnC --> DB : "Obtener modelos usados"
+
+App --> WeatherAPI : "Solicitud de datos climáticos"
+CC --> WeatherAPI : "Obtener pronósticos de clima"
+App --> AlertsAPI : "Solicitar alertas de inundación/sequía"
+AC --> AlertsAPI : "Obtener alertas de eventos climáticos"
+
+App --> ModelsAPI : "Solicitar predicciones de rendimiento"
+CnC --> ModelsAPI : "Solicitud de consejos(data)"
+ModelsAPI --> GitHubConnector : "Obtener modelos actualizados"
+GitHubConnector --> PredictionModels : "Descargar y ejecutar modelos"
+
+App --> MapsAPI : "Solicitud de mapas y datos de ubicación"
+CC --> MapsAPI : "Mostrar mapas con datos climáticos"
+
+@enduml

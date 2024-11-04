@@ -1,0 +1,62 @@
+@startuml
+actor Agricultor
+participant "SignupActivity" as SA
+participant "SignupController" as SC
+participant "FirebaseAuth" as Auth
+participant "UserProfileController" as UPC
+participant "ConsejosController" as RC
+participant "FirebaseDatabase" as DB
+participant "ClimaController" as CC
+participant "RegistroCultivoActivity" as RCA
+participant "RegistroCultivoController" as RCC
+participant "FirebaseDatabase" as DB
+participant "Cultivo" as C
+participant "Render" as Render
+participant "GitHub" as GitHub
+
+== Autenticación ==
+Agricultor -> SA: Ingresar correo y contraseña
+SA -> SC: verificarCredenciales(correo, contraseña)
+SC -> Auth: signInWithEmailAndPassword(correo, contraseña)
+Auth --> SC: respuesta (éxito o fallo)
+
+alt Autenticación exitosa
+    SC -> UPC: cargarPerfil(userId)
+    UPC -> DB: get(userId)
+    DB --> UPC: datos del usuario
+    UPC --> SC: datos del usuario
+    SC --> SA: mostrar mensaje de éxito
+else Autenticación falla
+    SC --> SA: mostrar mensaje de error
+end
+
+== Visualización de Recomendaciones ==
+Agricultor -> SA: Solicitar recomendaciones
+SA -> RC: obtenerRecomendaciones(userId)
+RC -> Render: solicitarModeloRecomendacion
+Render -> GitHub: obtenerModelo
+GitHub --> Render: enviarModelo
+
+Render --> RC: enviarRecomendaciones
+RC -> CC: procesarDatos(cultivos, condiciones)
+CC --> RC: recomendaciones procesadas
+RC --> SA: mostrarRecomendaciones(recomendaciones)
+SA -> Agricultor: visualizar recomendaciones
+
+== Registro de Datos ==
+Agricultor -> RCA: Escoger objetivo
+Agricultor -> RCA: Ingresar datos del cultivo
+RCA -> RCC: registrarCultivo(datosCultivo)
+RCC -> C: crearCultivo(datosCultivo)
+
+alt Registro exitoso
+    RCC -> DB: save(cultivo)
+    DB --> RCC: confirmación
+    RCC --> RCA: mostrar mensaje de éxito
+    RCA -> Agricultor: "Cultivo registrado exitosamente."
+else Registro falla
+    RCC --> RCA: mostrar mensaje de error
+    RCA -> Agricultor: "Error al registrar el cultivo."
+end
+
+@enduml

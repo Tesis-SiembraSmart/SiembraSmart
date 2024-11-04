@@ -1,0 +1,191 @@
+@startuml
+
+package "com.example.siembrasmart" {
+
+    package controllers {
+        class NewsController {
+            + filterNewsByCountry(country: String): List<News>
+            + loadNewsForCrops(crops: List<String>): void
+        }
+
+        class ConsejosController {
+            + loadConsejos(): List<Consejo>
+            + filterConsejosByTopic(topic: String): List<Consejo>
+        }
+
+        class ForecastController {
+            + fetchWeatherForecast(location: Location): Forecast
+            + updateForecast(forecast: Forecast): void
+        }
+
+        class AlertController {
+            + fetchAlerts(): List<Alertas>
+            + setAlertThresholds(floodLevel: Double, droughtLevel: Double): void
+            + sendAlertNotifications(): void
+        }
+
+        class ClimaController {
+            + getCurrentWeather(location: Location): Clima
+            + updateClimaData(clima: Clima): void
+        }
+
+        class RegistroCultivoController {
+            + registerNewCultivo(cultivo: Cultivo): void
+            + updateCultivoInfo(cultivoId: String, updatedCultivo: Cultivo): void
+        }
+
+        class SignupController {
+            + signUpUser(email: String, password: String): Boolean
+            + validateUserInfo(user: Usuario): Boolean
+        }
+
+        class StartFormController {
+            + saveSelectedModels(userId: String, selectedModels: List<String>, callback: (Boolean) -> Unit): void
+        }
+
+        class UserProfileController {
+            + loadUserProfile(userId: String, onDataLoaded: (Usuario?) -> Unit): void
+            + saveUserProfile(userId: String, updatedUserData: Map<String, String>, onSaveComplete: (Boolean) -> Unit): void
+            + signOut(): void
+        }
+    }
+
+    package models {
+        class Alertas {
+            + floodThreshold: Double
+            + droughtThreshold: Double
+            + type: String
+            + message: String
+        }
+
+        class Clima {
+            + temperature: Double
+            + humidity: Double
+            + windSpeed: Double
+            + location: Location
+        }
+
+        class Forecast {
+            + date: Date
+            + weatherCondition: String
+            + highTemp: Double
+            + lowTemp: Double
+        }
+
+        class Cultivo {
+            + nombre: String
+            + tipo: String
+            + fechaInicio: Date
+            + fechaFin: Date
+            + latitud: Double
+            + longitud: Double
+            + area: Double
+            + id: String
+        }
+
+        class Usuario {
+            + firstName: String
+            + lastName: String
+            + email: String
+            + phoneNumber: String
+            + modelsUsed: List<String>
+        }
+    }
+
+    package utils {
+        class CustomMarkerView {
+            + updateMarker(data: Clima): void
+        }
+
+        class Navigation {
+            + navigateToActivity(context: Context, activityClass: Class<*>): void
+        }
+
+        class Notification {
+            + sendNotification(title: String, message: String): void
+        }
+    }
+
+    package views {
+        class ClimaActivity {
+            - climaController: ClimaController
+            + displayWeatherInfo(): void
+        }
+
+        class AlertActivity {
+            - alertController: AlertController
+            + configureAlertSettings(): void
+        }
+
+        class ConsejosActivity {
+            - consejosController: ConsejosController
+            + showConsejos(): void
+        }
+
+        class ForecastsActivity {
+            - forecastController: ForecastController
+            + displayForecasts(): void
+        }
+
+        class NewsActivity {
+            - newsController: NewsController
+            + filterNewsByCountry(): void
+        }
+
+        class RegistroCultivoActivity {
+            - registroCultivoController: RegistroCultivoController
+            + saveCultivoData(): void
+        }
+
+        class SignupActivity {
+            - signupController: SignupController
+            + registerUser(): void
+        }
+
+        class StartFormActivity {
+            - startFormController: StartFormController
+            + saveSelectedModels(): void
+        }
+
+        class UserProfileActivity {
+            - userProfileController: UserProfileController
+            + loadUserProfile(): void
+            + saveUserProfile(): void
+            + signOut(): void
+        }
+
+        class MainActivity {
+            + checkLoginStatus(): void
+            + requestPermissions(): void
+        }
+    }
+
+    ClimaActivity --> ClimaController : uses
+    AlertActivity --> AlertController : uses
+    ConsejosActivity --> ConsejosController : uses
+    ForecastsActivity --> ForecastController : uses
+    NewsActivity --> NewsController : uses
+    RegistroCultivoActivity --> RegistroCultivoController : uses
+    SignupActivity --> SignupController : uses
+    StartFormActivity --> StartFormController : uses
+    UserProfileActivity --> UserProfileController : uses
+
+    UserProfileController --> Usuario : manages
+    StartFormController --> Usuario : stores models used
+    NewsController --> Usuario : retrieves news preferences
+    AlertController --> Alertas : retrieves alert data
+    ClimaController --> Clima : updates weather data
+    ForecastController --> Forecast : retrieves forecast data
+    RegistroCultivoController --> Cultivo : manages crop data
+
+    CustomMarkerView --> Clima : displays climate info
+    Notification --> Alertas : sends alerts
+    Navigation --> ClimaActivity : navigates to
+    Navigation --> MainActivity : navigates to
+    Navigation --> SignupActivity : navigates to
+
+    MainActivity --> ClimaActivity : navigates on login
+    MainActivity --> SignupActivity : navigates on signup
+}
+
+@enduml

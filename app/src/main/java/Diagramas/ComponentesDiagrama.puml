@@ -1,0 +1,99 @@
+@startuml
+
+package "Componentes Principales de SiembraSmart" {
+
+    component "Controllers" {
+        [NewsController]
+        [ConsejosController]
+        [ForecastController]
+        [AlertController]
+        [ClimaController]
+        [RegistroCultivoController]
+        [SignupController]
+        [StartFormController]
+        [UserProfileController]
+    }
+
+    component "Models" {
+        [Alertas]
+        [Clima]
+        [Forecast]
+        [Cultivo]
+        [Usuario]
+    }
+
+    component "Views" {
+        [ClimaActivity]
+        [AlertActivity]
+        [ConsejosActivity]
+        [ForecastsActivity]
+        [NewsActivity]
+        [RegistroCultivoActivity]
+        [SignupActivity]
+        [StartFormActivity]
+        [UserProfileActivity]
+        [MainActivity]
+    }
+
+    component "Utils" {
+        [CustomMarkerView]
+        [Navigation]
+        [Notification]
+    }
+
+    component "Render" {
+        [Render] -down-> [ConsejosController] : sends recommendations
+        [Render] -left-> GitHub : executes models
+    }
+
+    component "Firebase Auth" as FirebaseAuth {
+        [FirebaseAuth] -down-> [SignupController] : Authenticates User
+        [FirebaseAuth] -down-> [UserProfileController] : Manages Session
+        [FirebaseAuth] -down-> [MainActivity] : User Login
+    }
+
+    component "Firebase Realtime Database" as FirebaseDatabase {
+        [FirebaseDatabase] -down-> [UserProfileController] : Stores User Data
+        [FirebaseDatabase] -down-> [RegistroCultivoController] : Manages Crop Data
+        [FirebaseDatabase] -down-> [NewsController] : Retrieves News Preferences
+    }
+
+    component "Open Meteo API" {
+        [Open Meteo API] -down-> [ForecastController] : Fetches Weather Forecasts
+        [Open Meteo API] -down-> [ClimaController] : Retrieves Climate Data
+        [Open Meteo API] -down-> [AlertController] : Provides Flood/Drought Alerts
+    }
+
+    component "Google Maps API" as GoogleMaps {
+        [Google Maps API] -down-> [ClimaController] : Provides map data
+    }
+
+    [ClimaActivity] -up-> [ClimaController] : requests data
+    [AlertActivity] -up-> [AlertController] : configures alerts
+    [ConsejosActivity] -up-> [ConsejosController] : retrieves consejos
+    [ForecastsActivity] -up-> [ForecastController] : displays forecasts
+    [NewsActivity] -up-> [NewsController] : filters news
+    [RegistroCultivoActivity] -up-> [RegistroCultivoController] : saves crop info
+    [SignupActivity] -up-> [SignupController] : registers user
+    [StartFormActivity] -up-> [StartFormController] : selects models
+    [UserProfileActivity] -up-> [UserProfileController] : updates profile
+    [MainActivity] -up-> [FirebaseAuth] : checks login
+    [MainActivity] -up-> [Navigation] : navigates to views
+
+    [UserProfileController] -down-> [Usuario] : updates profile data
+    [StartFormController] -down-> [Usuario] : saves selected models
+    [NewsController] -down-> [Usuario] : accesses news preferences
+    [AlertController] -down-> [Alertas] : configures alert levels
+    [ClimaController] -down-> [Clima] : updates climate model
+    [ForecastController] -down-> [Forecast] : loads forecast data
+    [RegistroCultivoController] -down-> [Cultivo] : stores crop data
+
+    [CustomMarkerView] -down-> [Clima] : shows climate info
+    [Notification] -down-> [Alertas] : sends alerts
+    [Navigation] -down-> [MainActivity] : navigates between activities
+
+    FirebaseAuth -[hidden]-> OpenMeteoAPI
+    FirebaseAuth -[hidden]-> FirebaseDatabase
+}
+
+@enduml

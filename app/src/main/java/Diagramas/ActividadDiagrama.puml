@@ -1,0 +1,71 @@
+@startuml
+|Agricultor|
+start
+
+:Iniciar sesión en la aplicación;
+
+if (¿Autenticación exitosa?) then (sí)
+    :Visualizar menú principal;
+
+    partition "Opciones de Usuario" {
+        :Seleccionar opción;
+
+        if (Opción seleccionada = Consejos) then (sí)
+            |Render|
+            :Conectar a GitHub;
+            :Ejecutar modelos para recomendaciones;
+            |ConsejosController|
+            :Obtener recomendaciones de Render;
+            :Mostrar recomendaciones al agricultor;
+            -> [Hacer clic en una recomendación]
+            :Acceder a detalles de recomendación;
+        else (no)
+            if (Opción seleccionada = Clima) then (sí)
+                |ClimaController|
+                :Obtener datos de clima;
+                :Mostrar datos de clima al agricultor;
+            else (no)
+
+                if (Opción seleccionada = Registro de Cultivo) then (sí)
+                    :Escoger objetivo;
+                    :Ingresar datos del cultivo;
+                    |RegistroCultivoController|
+                    :Validar datos;
+                    if (Datos válidos?) then (sí)
+                        :Crear objeto Cultivo;
+                        :Guardar en FirebaseDatabase;
+                        |FirebaseDatabase|
+                        :Confirmar registro;
+                        :Notificar éxito al agricultor;
+                    else (no)
+                        :Notificar error al agricultor;
+                    endif
+
+                else (no)
+
+                    if (Opción seleccionada = Notificaciones) then (sí)
+                        :Recibir notificaciones sobre eventos;
+                        |AlertController|
+                        :Mostrar alertas al agricultor;
+                    else (no)
+
+                    if (Opción seleccionada = Edición de Cuenta) then (sí)
+                        :Modificar información personal;
+                        |UserProfileController|
+                        :Guardar cambios en la cuenta;
+                    else (no)
+
+                    endif
+                    endif
+            endif
+        endif
+    endif
+
+    }
+else (no)
+    :Mostrar mensaje de error;
+endif
+
+:Finalizar sesión;
+stop
+@enduml

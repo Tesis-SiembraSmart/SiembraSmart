@@ -1,0 +1,425 @@
+@startuml
+
+package "controllers" {
+    class AlertController {
+        +fetchDatosOpenMeteo(latitud: Double, longitud: Double, startDate: String, endDate: String, onDataFetched: (JSONObject?) -> Unit)
+        +jsonArrayToStringList(jsonArray: JSONArray): MutableList<String>
+        +jsonArrayToDoubleList(jsonArray: JSONArray): MutableList<Double>
+    }
+}
+
+package "models" {
+    class Alertas {
+        +alertaInundacionRoja: String
+        +alertaInundacionAmarilla: String
+        +alertaSequíaRoja: String
+        +alertaSequíaAmarilla: String
+    }
+}
+
+package "views" {
+    class AlertActivity {
+        -binding: ActivityAlertBinding
+        -auth: FirebaseAuth
+        -alertController: AlertController
+        -fusedLocationClient: FusedLocationProviderClient
+        -times: MutableList<String>
+        -descargaRioMax: MutableList<Double>
+        -descargaRioMedia: MutableList<Double>
+        -descargaRioMin: MutableList<Double>
+        -totalAlertas: Int
+        -calendar: Calendar
+        +onCreate(savedInstanceState: Bundle)
+        +getLocationAndFetchData()
+        +fetchWeatherData(latitud: Double, longitud: Double)
+        +filterDataFromToday(allTimes: MutableList<String>, allDescargaRioMax: MutableList<Double>, allDescargaRioMedia: MutableList<Double>, allDescargaRioMin: MutableList<Double>)
+        +generateFloodAndDroughtAlerts(dischargeMax: MutableList<Double>, dischargeMean: MutableList<Double>, dischargeMin: MutableList<Double>, maxThresholdRed: Double, meanThresholdYellow: Double, droughtThresholdRed: Double, droughtThresholdYellow: Double): Alertas
+        +calculateThresholdRed(descargaRioMax: MutableList<Double>): Double
+        +calculateThresholdYellow(descargaRioMedia: MutableList<Double>): Double
+        +calculateDroughtThresholdRed(descargaRioMin: MutableList<Double>): Double
+        +calculateDroughtThresholdYellow(descargaRioMin: MutableList<Double>): Double
+        +showAlert(time: Long, title: String, message: String)
+        +createNotificationChannel()
+        +scheduleCustomNotification()
+    }
+}
+
+AlertActivity --> AlertController : "uses"
+AlertActivity --> Alertas : "generates"
+AlertController --> JSONArray : "processes"
+AlertController --> JSONObject : "fetches data"
+
+package "controllers" {
+    class ClimaController {
+        -client: OkHttpClient
+        -dias: Int
+        +fetchDatosClima(latitud: Double, longitud: Double)
+        -actualizarDatosDesdeJson(json: JSONObject)
+        -jsonArrayToStringList(jsonArray: JSONArray): MutableList<String>
+        -jsonArrayToDoubleList(jsonArray: JSONArray): MutableList<Double>
+        -jsonArrayToIntList(jsonArray: JSONArray): MutableList<Int>
+    }
+}
+
+package "models" {
+    class Clima {
+        +temperatura: Double
+        +humedad: Int
+        +aparenteTemperatura: Double
+        +precipitacion: Double
+        +nubosidad: Int
+        +velocidadViento: Double
+        +temperaturas: MutableList<Double>
+        +humedades: MutableList<Int>
+        +probabilidadesPrecipitacion: MutableList<Int>
+        +precipitaciones: MutableList<Double>
+        +evapotranspiraciones: MutableList<Double>
+        +velocidadesViento: MutableList<Double>
+        +humedadesSuelo: MutableList<Double>
+        +times: MutableList<String>
+    }
+}
+
+package "views" {
+    class ClimaActivity {
+        -auth: FirebaseAuth
+        -clima: Clima
+        -climaController: ClimaController
+        -binding: ActivityClimaBinding
+        -map: GoogleMap
+        -fusedLocationClient: FusedLocationProviderClient
+        +onCreate(savedInstanceState: Bundle)
+        +obtenerDatosClima()
+        +actualizarInterfaz()
+        +actualizarMapa(latitud: Double, longitud: Double)
+        +ajustarWindowInsets()
+        +onMapReady(googleMap: GoogleMap)
+        +enableMyLocation()
+        +onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray)
+    }
+}
+
+ClimaController --> Clima : updates
+ClimaActivity --> ClimaController : uses
+ClimaActivity --> Clima : displays
+
+package "controllers" {
+    class ClimaController {
+        -client: OkHttpClient
+        -dias: Int
+        +fetchDatosClima(latitud: Double, longitud: Double)
+        -actualizarDatosDesdeJson(json: JSONObject)
+        -jsonArrayToStringList(jsonArray: JSONArray): MutableList<String>
+        -jsonArrayToDoubleList(jsonArray: JSONArray): MutableList<Double>
+        -jsonArrayToIntList(jsonArray: JSONArray): MutableList<Int>
+    }
+}
+
+package "models" {
+    class Clima {
+        +temperatura: Double
+        +humedad: Int
+        +aparenteTemperatura: Double
+        +precipitacion: Double
+        +nubosidad: Int
+        +velocidadViento: Double
+        +temperaturas: MutableList<Double>
+        +humedades: MutableList<Int>
+        +probabilidadesPrecipitacion: MutableList<Int>
+        +precipitaciones: MutableList<Double>
+        +evapotranspiraciones: MutableList<Double>
+        +velocidadesViento: MutableList<Double>
+        +humedadesSuelo: MutableList<Double>
+        +times: MutableList<String>
+    }
+}
+
+package "views" {
+    class ClimaActivity {
+        -auth: FirebaseAuth
+        -clima: Clima
+        -climaController: ClimaController
+        -binding: ActivityClimaBinding
+        -map: GoogleMap
+        -fusedLocationClient: FusedLocationProviderClient
+        +onCreate(savedInstanceState: Bundle)
+        +obtenerDatosClima()
+        +actualizarInterfaz()
+        +actualizarMapa(latitud: Double, longitud: Double)
+        +ajustarWindowInsets()
+        +onMapReady(googleMap: GoogleMap)
+        +enableMyLocation()
+        +onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray)
+    }
+}
+
+ClimaController --> Clima : updates
+ClimaActivity --> ClimaController : uses
+ClimaActivity --> Clima : displays
+
+package "controllers" {
+    class ConsejosController {
+        -client: OkHttpClient
+        -database: DatabaseReference
+        +makePredictionRequest(data: JSONObject, callback: (String) -> Unit)
+        +configurarSpinner(userId: String, spinner: Spinner, onItemSelected: (String) -> Unit)
+    }
+}
+
+package "views" {
+    class ConsejosActivity {
+        -auth: FirebaseAuth
+        -binding: ActivityConsejosBinding
+        -controller: ConsejosController
+        +onCreate(savedInstanceState: Bundle)
+        +cargarFormulario(modelo: String)
+        +cargarFormularioCacao()
+        +cargarFormularioCafe()
+    }
+}
+
+ConsejosController --> ConsejosActivity : uses
+ConsejosActivity --> ConsejosController : communicates with
+ConsejosActivity ..> JSONObject : processes
+
+package "controllers" {
+    class ForecastController {
+        +configurarGrafico(grafico: LineChart, context: Context, tiempos: List<String>, label: String)
+        +crearGrafico(entradas: List<Entry>, label: String, tiempos: List<String>, grafico: LineChart, context: Context)
+    }
+
+    class FormateadorEjeTiempo {
+        -tiempos: List<String>
+        +getFormattedValue(value: Float): String
+    }
+
+    ForecastController ..> FormateadorEjeTiempo : uses
+}
+
+package "models" {
+    class Forecast {
+        -temperaturas: List<Double>
+        -humedades: List<Int>
+        -probabilidadesPrecipitacion: List<Int>
+        -precipitaciones: List<Double>
+        -evapotranspiraciones: List<Double>
+        -velocidadesViento: List<Double>
+        -humedadesSuelo: List<Double>
+        -tiempos: List<String>
+    }
+}
+
+package "views" {
+    class ForecastsActivity {
+        -forecastController: ForecastController
+        -binding: ActivityForecastsBinding
+        +onCreate(savedInstanceState: Bundle)
+        +crearGraficos(forecast: Forecast, graficoTemperatura: LineChart, graficoHumedad: LineChart, graficoProbabilidadPrecipitacion: LineChart, graficoPrecipitacion: LineChart, graficoEvapotranspiracion: LineChart, graficoVelocidadViento: LineChart, graficoHumedadSuelo: LineChart)
+        +configurarBotonesDeZoom(grafico: LineChart, buttonZoomIn: Button, buttonZoomOut: Button)
+    }
+
+}
+
+    ForecastsActivity ..> ForecastController : uses
+    ForecastsActivity ..> Forecast : uses
+
+    package "controllers" {
+        class NewsController {
+            - database: DatabaseReference
+            + configurarWebView(webView: WebView): void
+            + configurarSpinner(userId: String, spinner: Spinner, onItemSelected: (String) -> void): void
+            + generarUrlParaNoticias(cultivo: String, soloColombia: Boolean): String
+            + cargarUrlEnWebView(webView: WebView, url: String): void
+        }
+    }
+
+    package "views" {
+        class NewsActivity {
+            - binding: ActivityNewsBinding
+            - webView: WebView
+            - controlador: NewsController
+            - cultivoSeleccionado: String
+            + onCreate(savedInstanceState: Bundle): void
+            - configurarSpinner(userId: String): void
+            - cargarNoticias(): void
+        }
+    }
+
+    NewsActivity --> NewsController : uses
+    NewsActivity --> ActivityNewsBinding : contains
+    NewsActivity --> WebView : contains
+    NewsController --> DatabaseReference : uses
+    NewsController --> WebView : uses
+    NewsController --> Spinner : uses
+
+package "utils" {
+    class CustomMarkerView {
+        - dateTextView: TextView
+        - valueTextView: TextView
+        - inputDateFormat: SimpleDateFormat
+        - outputDateFormat: SimpleDateFormat
+        + CustomMarkerView(context: Context, layoutResource: Int, data: List<Pair<String, Double>>, label: String)
+        + refreshContent(e: Entry?, highlight: Highlight?): void
+        - labelWithoutUnits(label: String): String
+        - getUnitForLabel(label: String): String
+        + getOffset(): MPPointF
+    }
+
+    class Navigation {
+        + onCreate(savedInstanceState: Bundle): void
+        - setupBottomNavigationView(bottomNavigationView: BottomNavigationView): void
+        - setupToolbar(toolbar: Toolbar): void
+        + onCreateOptionsMenu(menu: Menu?): Boolean
+        + onOptionsItemSelected(item: MenuItem): Boolean
+        - showBottomDialog(): void
+    }
+
+    class Notification {
+        + onReceive(context: Context, intent: Intent): void
+    }
+}
+
+CustomMarkerView --> TextView : uses
+CustomMarkerView --> SimpleDateFormat : uses
+Navigation --> BottomNavigationView : uses
+Navigation --> Toolbar : uses
+Navigation --> Intent : uses
+Notification --> NotificationManager : uses
+Notification --> NotificationCompat : uses
+
+package "controllers" {
+    class RegistroCultivoController {
+        - database: DatabaseReference
+        - auth: FirebaseAuth
+        + saveCultivoForCurrentUser(cultivo: Cultivo, callback: (Boolean) -> Unit): void
+    }
+}
+
+package "models" {
+    class Cultivo {
+        - nombre: String
+        - tipo: String
+        - fechaInicio: Date
+        - latitud: Double
+        - longitud: Double
+        - area: Double
+        - id: String
+    }
+}
+
+package "views" {
+    class RegistroCultivoActivity {
+        - binding: ActivityRegistroCultivoBinding
+        - controller: RegistroCultivoController
+        - selectedDate: Date?
+        + onCreate(savedInstanceState: Bundle): void
+        - showDatePickerDialog(): void
+        - saveCultivo(): void
+    }
+}
+
+RegistroCultivoActivity --> RegistroCultivoController : uses
+RegistroCultivoActivity --> ActivityRegistroCultivoBinding : uses
+RegistroCultivoActivity --> Intent : uses
+RegistroCultivoController --> DatabaseReference : uses
+RegistroCultivoController --> FirebaseAuth : uses
+Cultivo ..> Date : uses
+
+package "controllers" {
+    class SignupController {
+        - auth: FirebaseAuth
+        - database: DatabaseReference
+        + createAccount(email: String, password: String, firstName: String, lastName: String, phoneNumber: String, activity: SignupActivity): void
+        - saveUserToDatabase(userId: String, user: Usuario, activity: SignupActivity): void
+    }
+}
+
+package "models" {
+    class Usuario {
+        - firstName: String
+        - lastName: String
+        - email: String
+        - phoneNumber: String
+        - modelosUsados: List<String>
+        - cultivos: List<Cultivo>
+    }
+}
+
+package "views" {
+    class SignupActivity {
+        - binding: ActivitySignupBinding
+        - controller: SignupController
+        + onCreate(savedInstanceState: Bundle): void
+        - setupListeners(): void
+        + onAccountCreationSuccess(): void
+        + onAccountCreationFailure(errorMessage: String): void
+        + onUserSaveSuccess(): void
+        + onUserSaveFailure(errorMessage: String): void
+    }
+}
+
+SignupActivity --> SignupController : uses
+SignupActivity --> ActivitySignupBinding : uses
+SignupController --> FirebaseAuth : uses
+SignupController --> DatabaseReference : uses
+Usuario --> Cultivo : uses
+
+package "controllers" {
+    class StartFormController {
+        - database: DatabaseReference
+        + saveSelectedModels(userId: String, selectedModels: List<String>, callback: (Boolean) -> Unit): void
+    }
+}
+
+package "views" {
+    class StartFormActivity {
+        - binding: ActivityStartFormBinding
+        - controller: StartFormController
+        + onCreate(savedInstanceState: Bundle): void
+    }
+}
+
+StartFormActivity --> StartFormController : uses
+StartFormActivity --> ActivityStartFormBinding : uses
+StartFormController --> DatabaseReference : uses
+
+package "controllers" {
+    class UserProfileController {
+        - context: Context
+        - userRef: DatabaseReference
+        - auth: FirebaseAuth
+        + loadUserProfile(userId: String, onDataLoaded: (Usuario?) -> Unit): void
+        + saveUserProfile(userId: String, updatedFirstName: String, updatedLastName: String, updatedEmail: String, updatedPhoneNumber: String, onSaveComplete: (Boolean) -> Unit): void
+        + signOut(): void
+    }
+}
+
+package "views" {
+    class UserProfileActivity {
+        - binding: ActivityUserProfileBinding
+        - userId: String
+        - controller: UserProfileController
+        + onCreate(savedInstanceState: Bundle): void
+        - loadUserProfile(): void
+        - cerrarSesion(): void
+    }
+}
+
+UserProfileActivity --> UserProfileController : uses
+UserProfileController --> DatabaseReference : uses
+UserProfileController --> FirebaseAuth : uses
+
+package "views" {
+    class MainActivity {
+        - auth: FirebaseAuth
+        - binding: ActivityMainBinding
+        + onCreate(savedInstanceState: Bundle): void
+        + onStart(): void
+    }
+}
+
+MainActivity --> FirebaseAuth : uses
+MainActivity --> ActivityMainBinding : uses
+MainActivity --> ClimaActivity : navigates to
+MainActivity --> SignupActivity : navigates to
+@enduml
