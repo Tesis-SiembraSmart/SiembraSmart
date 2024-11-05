@@ -8,7 +8,7 @@ import com.example.siembrasmart.databinding.ActivityForecastsBinding
 import com.example.siembrasmart.models.Forecast
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
-import android.widget.Button
+import android.widget.ImageButton
 
 class ForecastsActivity : AppCompatActivity() {
     private lateinit var forecastController: ForecastController
@@ -48,7 +48,9 @@ class ForecastsActivity : AppCompatActivity() {
 
         // Crear los gráficos
         crearGraficos(forecast, graficoTemperatura, graficoHumedad, graficoProbabilidadPrecipitacion, graficoPrecipitacion, graficoEvapotranspiracion, graficoVelocidadViento, graficoHumedadSuelo)
-        binding.backbutton.setOnClickListener {
+        // Configurar la barra superior
+        binding.topAppBar.setNavigationOnClickListener {
+            // Acción al hacer clic en el ícono de navegación (botón atrás)
             val intent = Intent(this, ClimaActivity::class.java)
             startActivity(intent)
         }
@@ -124,7 +126,7 @@ class ForecastsActivity : AppCompatActivity() {
         )
     }
     // Función para configurar los botones de zoom para un gráfico específico
-    fun configurarBotonesDeZoom(grafico: LineChart, buttonZoomIn: Button, buttonZoomOut: Button) {
+    fun configurarBotonesDeZoom(grafico: LineChart, buttonZoomIn: ImageButton, buttonZoomOut: ImageButton) {
         buttonZoomIn.setOnClickListener {
             grafico.zoomIn() // Realiza el zoom in en el gráfico
         }

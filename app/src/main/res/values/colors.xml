@@ -3,12 +3,13 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="purple">#AC18EB</color>
-    <color name="colorPrimary">#5E18EB</color>
     <color name="red">#FF0000</color>
     <color name="background_color">#2C2C2C</color>
     <color name="verde_icon">#34C6A8</color>
     <color name="azul">#0031C3</color>
-
+    <color name="colorPrimary">#34C6A8</color>
+    <color name="colorPrimaryDark">#2CA08A</color>
+    <color name="colorAccent">#FF4081</color>
     <!-- COLORES DE PRUEBA-->
     <!-- Verde (para el texto y elementos principales) -->    <color name="tittles">#4CAF50</color>
     <!-- Marrón (para botones principales -->
