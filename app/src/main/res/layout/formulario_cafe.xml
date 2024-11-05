@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -32,6 +30,7 @@
             android:orientation="vertical"
             android:gravity="center_horizontal">
 
+            <!-- Área de Café -->
             <EditText
                 android:id="@+id/etCoffeeAcreage"
                 android:layout_width="match_parent"
@@ -40,6 +39,109 @@
                 android:inputType="numberDecimal"
                 android:layout_marginTop="8dp" />
 
+            <!-- Switch para Fertilizantes -->
+            <Switch
+                android:thumbTint="@color/verde_icon"
+                android:id="@+id/switchFertilizer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¿Utilizó fertilizantes?"
+                android:layout_marginTop="16dp" />
+
+            <!-- Campos relacionados con Fertilizantes -->
+            <LinearLayout
+                android:id="@+id/layoutFertilizer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/etCoffeeAcreageFertilizer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Área Fertilizada de Café (ha)"
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="8dp" />
+
+                <EditText
+                    android:id="@+id/etCoffeeFertilizerCost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Costo de Fertilizante para Café"
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <!-- Switch para Químicos -->
+            <Switch
+                android:thumbTint="@color/verde_icon"
+                android:id="@+id/switchChemicals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¿Utilizó químicos?"
+                android:layout_marginTop="16dp" />
+
+            <!-- Campos relacionados con Químicos -->
+            <LinearLayout
+                android:id="@+id/layoutChemicals"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/etCoffeeChemicalAcreage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Área de Químicos para Café (ha)"
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="8dp" />
+
+                <EditText
+                    android:id="@+id/etCoffeeChemicalCost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Costo de Químicos para Café"
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <!-- Switch para Maquinaria -->
+            <Switch
+                android:thumbTint="@color/verde_icon"
+                android:id="@+id/switchMachinery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¿Utilizó maquinaria?"
+                android:layout_marginTop="16dp" />
+
+            <!-- Campos relacionados con Maquinaria -->
+            <LinearLayout
+                android:id="@+id/layoutMachinery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/etCoffeeMachineryAcreage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Área de Maquinaria para Café (ha)"
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="8dp" />
+
+                <EditText
+                    android:id="@+id/etCoffeeMachineryCost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Costo de Maquinaria para Café"
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <!-- Otros campos -->
             <EditText
                 android:id="@+id/etCoffeeImprovedAcreage"
                 android:layout_width="match_parent"
@@ -53,54 +155,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Costo Mejorado de Café"
-                android:inputType="numberDecimal"
-                android:layout_marginTop="8dp" />
-
-            <EditText
-                android:id="@+id/etCoffeeAcreageFertilizer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Área Fertilizada de Café (ha)"
-                android:inputType="numberDecimal"
-                android:layout_marginTop="8dp" />
-
-            <EditText
-                android:id="@+id/etCoffeeFertilizerCost"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Costo de Fertilizante para Café"
-                android:inputType="numberDecimal"
-                android:layout_marginTop="8dp" />
-
-            <EditText
-                android:id="@+id/etCoffeeChemicalAcreage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Área de Químicos para Café (ha)"
-                android:inputType="numberDecimal"
-                android:layout_marginTop="8dp" />
-
-            <EditText
-                android:id="@+id/etCoffeeChemicalCost"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Costo de Químicos para Café"
-                android:inputType="numberDecimal"
-                android:layout_marginTop="8dp" />
-
-            <EditText
-                android:id="@+id/etCoffeeMachineryAcreage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Área de Maquinaria para Café (ha)"
-                android:inputType="numberDecimal"
-                android:layout_marginTop="8dp" />
-
-            <EditText
-                android:id="@+id/etCoffeeMachineryCost"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Costo de Maquinaria para Café"
                 android:inputType="numberDecimal"
                 android:layout_marginTop="8dp" />
 
@@ -127,6 +181,7 @@
                 android:hint="Pérdida en la Cosecha de Café"
                 android:inputType="numberDecimal"
                 android:layout_marginTop="8dp" />
+
         </LinearLayout>
     </ScrollView>
 
