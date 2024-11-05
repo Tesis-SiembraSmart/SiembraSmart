@@ -17,8 +17,8 @@ if (¿Autenticación exitosa?) then (sí)
             |ConsejosController|
             :Obtener recomendaciones de Render;
             :Mostrar recomendaciones al agricultor;
-            -> [Hacer clic en una recomendación]
-            :Acceder a detalles de recomendación;
+            -> [Visualizar recomendaciones] |Agricultor|
+
         else (no)
             if (Opción seleccionada = Clima) then (sí)
                 |ClimaController|
@@ -59,7 +59,6 @@ if (¿Autenticación exitosa?) then (sí)
                     endif
             endif
         endif
-    endif
 
     }
 else (no)
