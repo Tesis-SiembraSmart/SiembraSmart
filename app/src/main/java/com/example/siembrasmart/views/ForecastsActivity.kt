@@ -14,25 +14,15 @@ class ForecastsActivity : AppCompatActivity() {
     private lateinit var forecastController: ForecastController
     private lateinit var binding: ActivityForecastsBinding
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Inflar el layout usando ViewBinding
         binding = ActivityForecastsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        forecastController = ForecastController()
 
-        // Configurar los gráficos
-        val graficoTemperatura: LineChart = binding.graficoTemperatura
-        val graficoHumedad: LineChart = binding.graficoHumedad
-        val graficoProbabilidadPrecipitacion: LineChart = binding.graficoProbabilidadPrecipitacion
-        val graficoPrecipitacion: LineChart = binding.graficoPrecipitacion
-        val graficoEvapotranspiracion: LineChart = binding.graficoEvapotranspiracion
-        val graficoVelocidadViento: LineChart = binding.graficoVelocidadViento
-        val graficoHumedadSuelo: LineChart = binding.graficoHumedadSuelo
-
-        // Obtener los datos del intent
+        // Obtener datos del intent y crear el objeto Forecast
         val forecast = Forecast(
             temperaturas = intent.getDoubleArrayExtra("temperaturas")?.toList() ?: listOf(),
             humedades = intent.getIntArrayExtra("humedades")?.toList() ?: listOf(),
@@ -44,17 +34,20 @@ class ForecastsActivity : AppCompatActivity() {
             tiempos = intent.getStringArrayListExtra("times") ?: listOf()
         )
 
-        forecastController = ForecastController()
+        // Llamar a fillNullValues para rellenar los valores nulos
+        val filledForecast = forecastController.fillNullValues(forecast, 0.0)
 
-        // Crear los gráficos
-        crearGraficos(forecast, graficoTemperatura, graficoHumedad, graficoProbabilidadPrecipitacion, graficoPrecipitacion, graficoEvapotranspiracion, graficoVelocidadViento, graficoHumedadSuelo)
-        // Configurar la barra superior
+        // Luego, recortar los datos
+        val trimmedForecast = forecastController.trimForecastData(filledForecast)
+
+        // Crear gráficos con los datos recortados
+        crearGraficos(trimmedForecast)
+
         binding.topAppBar.setNavigationOnClickListener {
-            // Acción al hacer clic en el ícono de navegación (botón atrás)
-            val intent = Intent(this, ClimaActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, ClimaActivity::class.java))
         }
-        // En tu onCreate o donde configures los gráficos
+
+
         configurarBotonesDeZoom(binding.graficoTemperatura, binding.buttonZoomInTemperatura, binding.buttonZoomOutTemperatura)
         configurarBotonesDeZoom(binding.graficoHumedad, binding.buttonZoomInHumedad, binding.buttonZoomOutHumedad)
         configurarBotonesDeZoom(binding.graficoProbabilidadPrecipitacion, binding.buttonZoomInProbabilidadPrecipitacion, binding.buttonZoomOutProbabilidadPrecipitacion)
@@ -62,78 +55,69 @@ class ForecastsActivity : AppCompatActivity() {
         configurarBotonesDeZoom(binding.graficoEvapotranspiracion, binding.buttonZoomInEvapotranspiracion, binding.buttonZoomOutEvapotranspiracion)
         configurarBotonesDeZoom(binding.graficoVelocidadViento, binding.buttonZoomInVelocidadViento, binding.buttonZoomOutVelocidadViento)
         configurarBotonesDeZoom(binding.graficoHumedadSuelo, binding.buttonZoomInHumedadSuelo, binding.buttonZoomOutHumedadSuelo)
-
     }
 
-    private fun crearGraficos(forecast: Forecast, graficoTemperatura: LineChart, graficoHumedad: LineChart, graficoProbabilidadPrecipitacion: LineChart, graficoPrecipitacion: LineChart, graficoEvapotranspiracion: LineChart, graficoVelocidadViento: LineChart, graficoHumedadSuelo: LineChart) {
+    private fun crearGraficos(forecast: Forecast) {
         val tiempos = forecast.tiempos
-
         forecastController.crearGrafico(
-            entradas = forecast.temperaturas.mapIndexed { index, temp -> Entry(index.toFloat(), temp.toFloat()) },
-            label = "Temperatura (°C)",
-            tiempos = tiempos,
-            grafico = graficoTemperatura,
-            context = this
-
+            forecast.temperaturas.mapIndexed { index, temp -> Entry(index.toFloat(), temp.toFloat()) },
+            "Temperatura (°C)",
+            tiempos,
+            binding.graficoTemperatura,
+            this
         )
 
         forecastController.crearGrafico(
-            entradas = forecast.humedades.mapIndexed { index, humidity -> Entry(index.toFloat(), humidity.toFloat()) },
-            label = "Humedad (%)",
-            tiempos = tiempos,
-            grafico = graficoHumedad,
-            context = this
+            forecast.humedades.mapIndexed { index, humidity -> Entry(index.toFloat(), humidity.toFloat()) },
+            "Humedad (%)",
+            tiempos,
+            binding.graficoHumedad,
+            this
         )
 
         forecastController.crearGrafico(
-            entradas = forecast.probabilidadesPrecipitacion.mapIndexed { index, prob -> Entry(index.toFloat(), prob.toFloat()) },
-            label = "Probabilidad de Precipitación (%)",
-            tiempos = tiempos,
-            grafico = graficoProbabilidadPrecipitacion,
-            context = this
+            forecast.probabilidadesPrecipitacion.mapIndexed { index, prob -> Entry(index.toFloat(), prob.toFloat()) },
+            "Probabilidad de Precipitación (%)",
+            tiempos,
+            binding.graficoProbabilidadPrecipitacion,
+            this
         )
 
         forecastController.crearGrafico(
-            entradas = forecast.precipitaciones.mapIndexed { index, precip -> Entry(index.toFloat(), precip.toFloat()) },
-            label = "Precipitación (mm)",
-            tiempos = tiempos,
-            grafico = graficoPrecipitacion,
-            context = this
+            forecast.precipitaciones.mapIndexed { index, precip -> Entry(index.toFloat(), precip.toFloat()) },
+            "Precipitación (mm)",
+            tiempos,
+            binding.graficoPrecipitacion,
+            this
         )
 
         forecastController.crearGrafico(
-            entradas = forecast.evapotranspiraciones.mapIndexed { index, et -> Entry(index.toFloat(), et.toFloat()) },
-            label = "Evapotranspiración (mm)",
-            tiempos = tiempos,
-            grafico = graficoEvapotranspiracion,
-            context = this
+            forecast.evapotranspiraciones.mapIndexed { index, et -> Entry(index.toFloat(), et.toFloat()) },
+            "Evapotranspiración (mm)",
+            tiempos,
+            binding.graficoEvapotranspiracion,
+            this
         )
 
         forecastController.crearGrafico(
-            entradas = forecast.velocidadesViento.mapIndexed { index, windSpeed -> Entry(index.toFloat(), windSpeed.toFloat()) },
-            label = "Velocidad del Viento (km/h)",
-            tiempos = tiempos,
-            grafico = graficoVelocidadViento,
-            context = this
+            forecast.velocidadesViento.mapIndexed { index, windSpeed -> Entry(index.toFloat(), windSpeed.toFloat()) },
+            "Velocidad del Viento (km/h)",
+            tiempos,
+            binding.graficoVelocidadViento,
+            this
         )
 
         forecastController.crearGrafico(
-            entradas = forecast.humedadesSuelo.mapIndexed { index, soilMoisture -> Entry(index.toFloat(), soilMoisture.toFloat()) },
-            label = "Humedad del Suelo (m³/m³)",
-            tiempos = tiempos,
-            grafico = graficoHumedadSuelo,
-            context = this
+            forecast.humedadesSuelo.mapIndexed { index, soilMoisture -> Entry(index.toFloat(), soilMoisture.toFloat()) },
+            "Humedad del Suelo (m³/m³)",
+            tiempos,
+            binding.graficoHumedadSuelo,
+            this
         )
     }
-    // Función para configurar los botones de zoom para un gráfico específico
-    fun configurarBotonesDeZoom(grafico: LineChart, buttonZoomIn: ImageButton, buttonZoomOut: ImageButton) {
-        buttonZoomIn.setOnClickListener {
-            grafico.zoomIn() // Realiza el zoom in en el gráfico
-        }
 
-        buttonZoomOut.setOnClickListener {
-            grafico.zoomOut() // Realiza el zoom out en el gráfico
-        }
+    private fun configurarBotonesDeZoom(grafico: LineChart, buttonZoomIn: ImageButton, buttonZoomOut: ImageButton) {
+        buttonZoomIn.setOnClickListener { grafico.zoomIn() }
+        buttonZoomOut.setOnClickListener { grafico.zoomOut() }
     }
-
 }
