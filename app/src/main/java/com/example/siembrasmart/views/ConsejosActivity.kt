@@ -77,7 +77,9 @@ class ConsejosActivity : Navigation() {
 
             controller.makePredictionRequest(data) { result ->
                 runOnUiThread {
-                    resultadoTextView.text = result
+                    // Limitar el resultado a dos decimales usando substring
+                    val formattedResult = result.substringBefore(".") + "." + result.substringAfter(".").take(2)
+                    resultadoTextView.text = "$formattedResult t/ha"
                 }
             }
         }
@@ -168,7 +170,9 @@ class ConsejosActivity : Navigation() {
             // Realizar la solicitud de predicción
             controller.makePredictionRequest(data) { result ->
                 runOnUiThread {
-                    resultadoTextView.text = result
+                    val formattedResult2 = result.substringBefore(".") + "." + result.substringAfter(".").take(2)
+
+                    resultadoTextView.text = "$formattedResult2  kg"
                 }
             }
         }

@@ -29,13 +29,15 @@ class MainActivity : AppCompatActivity() {
         auth = Firebase.auth
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.signuptext.setOnClickListener{
-            val intent = Intent(this, SignupActivity::class.java)
-            startActivity(intent)
+
+        binding.signuptext.setOnClickListener {
+            checkAndRequestPermissions {
+                val intent = Intent(this, SignupActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         binding.loginbtn.setOnClickListener {
-
             val email = binding.loginmail.text.toString().trim()
             val password = binding.loginpw.text.toString().trim()
 
@@ -43,49 +45,13 @@ class MainActivity : AppCompatActivity() {
                 auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            val permissionsToRequest = mutableListOf<String>()
-
-                            // Solicitar permiso de ubicación
-                            if (ActivityCompat.checkSelfPermission(
-                                    this,
-                                    Manifest.permission.ACCESS_FINE_LOCATION
-                                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                                    this,
-                                    Manifest.permission.ACCESS_COARSE_LOCATION
-                                ) != PackageManager.PERMISSION_GRANTED
-                            ) {
-                                permissionsToRequest.add(Manifest.permission.ACCESS_FINE_LOCATION)
-                                permissionsToRequest.add(Manifest.permission.ACCESS_COARSE_LOCATION)
+                            checkAndRequestPermissions {
+                                Log.d(TAG, "signInWithEmail:success")
+                                Toast.makeText(baseContext, "Login successful!", Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this, ClimaActivity::class.java)
+                                startActivity(intent)
+                                finish()
                             }
-
-                            // Solicitar permiso de notificaciones en Android 13+
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                if (ContextCompat.checkSelfPermission(
-                                        this,
-                                        Manifest.permission.POST_NOTIFICATIONS
-                                    ) != PackageManager.PERMISSION_GRANTED
-                                ) {
-                                    permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS)
-                                }
-                            }
-
-                            // Si hay permisos que solicitar, realizamos la solicitud
-                            if (permissionsToRequest.isNotEmpty()) {
-                                ActivityCompat.requestPermissions(
-                                    this,
-                                    permissionsToRequest.toTypedArray(),
-                                    1
-                                )
-                                return@addOnCompleteListener
-                            }
-
-                            // Si no hay permisos que solicitar, continuar con la navegación
-                            Log.d(TAG, "signInWithEmail:success")
-                            Toast.makeText(baseContext, "Login successful!", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this, ClimaActivity::class.java)
-                            startActivity(intent)
-                            finish()
-
                         } else {
                             Log.w(TAG, "signInWithEmail:failure", task.exception)
                             val errorMessage = task.exception?.message ?: "Authentication failed."
@@ -96,7 +62,59 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(baseContext, "Please enter email and password.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
 
+    // Función para verificar y solicitar permisos
+    private fun checkAndRequestPermissions(onPermissionsGranted: () -> Unit) {
+        val permissionsToRequest = mutableListOf<String>()
+
+        // Solicitar permiso de ubicación
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            permissionsToRequest.add(Manifest.permission.ACCESS_FINE_LOCATION)
+            permissionsToRequest.add(Manifest.permission.ACCESS_COARSE_LOCATION)
+        }
+
+        // Solicitar permiso de notificaciones en Android 13+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+
+        // Si hay permisos que solicitar, realizar la solicitud
+        if (permissionsToRequest.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, permissionsToRequest.toTypedArray(), 1)
+        } else {
+            // Si ya se tienen los permisos, ejecutar la acción proporcionada
+            onPermissionsGranted()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1) {
+            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                Toast.makeText(this, "Permissions granted!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Permissions denied.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     public override fun onStart() {
