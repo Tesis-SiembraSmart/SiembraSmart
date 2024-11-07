@@ -94,6 +94,16 @@
                             android:scaleType="fitCenter"
                             android:padding="0dp"
                             android:adjustViewBounds="true" />
+                        <ImageButton
+                            android:id="@+id/buttonHelpTemperatura"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="8dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Ayuda"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ayuda_foreground"/>
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -158,6 +168,17 @@
                             android:scaleType="fitCenter"
                             android:padding="0dp"
                             android:adjustViewBounds="true" />
+                        <!-- Botón de ayuda para el gráfico de Humedad -->
+                        <ImageButton
+                            android:id="@+id/buttonHelpHumedad"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="8dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Ayuda"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ayuda_foreground" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -222,6 +243,17 @@
                             android:scaleType="fitCenter"
                             android:padding="0dp"
                             android:adjustViewBounds="true" />
+                        <!-- Botón de ayuda para el gráfico de Probabilidad de Precipitación -->
+                        <ImageButton
+                            android:id="@+id/buttonHelpProbabilidadPrecipitacion"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="8dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Ayuda"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ayuda_foreground" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -286,6 +318,17 @@
                             android:scaleType="fitCenter"
                             android:padding="0dp"
                             android:adjustViewBounds="true" />
+                        <!-- Botón de ayuda para el gráfico de Precipitación -->
+                        <ImageButton
+                            android:id="@+id/buttonHelpPrecipitacion"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="8dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Ayuda"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ayuda_foreground" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -350,6 +393,17 @@
                             android:scaleType="fitCenter"
                             android:padding="0dp"
                             android:adjustViewBounds="true" />
+                        <!-- Botón de ayuda para el gráfico de Evapotranspiración -->
+                        <ImageButton
+                            android:id="@+id/buttonHelpEvapotranspiracion"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="8dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Ayuda"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ayuda_foreground" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -414,6 +468,17 @@
                             android:scaleType="fitCenter"
                             android:padding="0dp"
                             android:adjustViewBounds="true" />
+                        <!-- Botón de ayuda para el gráfico de Velocidad del Viento -->
+                        <ImageButton
+                            android:id="@+id/buttonHelpVelocidadViento"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="8dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Ayuda"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ayuda_foreground" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -478,6 +543,17 @@
                             android:scaleType="fitCenter"
                             android:padding="0dp"
                             android:adjustViewBounds="true" />
+                        <!-- Botón de ayuda para el gráfico de Humedad del Suelo -->
+                        <ImageButton
+                            android:id="@+id/buttonHelpHumedadSuelo"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="8dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="Ayuda"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ayuda_foreground" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

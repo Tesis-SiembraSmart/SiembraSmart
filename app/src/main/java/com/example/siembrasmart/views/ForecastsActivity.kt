@@ -9,6 +9,7 @@ import com.example.siembrasmart.models.Forecast
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import android.widget.ImageButton
+import com.example.siembrasmart.utils.mostrarDialogoAyuda
 
 class ForecastsActivity : AppCompatActivity() {
     private lateinit var forecastController: ForecastController
@@ -55,6 +56,8 @@ class ForecastsActivity : AppCompatActivity() {
         configurarBotonesDeZoom(binding.graficoEvapotranspiracion, binding.buttonZoomInEvapotranspiracion, binding.buttonZoomOutEvapotranspiracion)
         configurarBotonesDeZoom(binding.graficoVelocidadViento, binding.buttonZoomInVelocidadViento, binding.buttonZoomOutVelocidadViento)
         configurarBotonesDeZoom(binding.graficoHumedadSuelo, binding.buttonZoomInHumedadSuelo, binding.buttonZoomOutHumedadSuelo)
+        configurarBotonesAyuda()
+
     }
 
     private fun crearGraficos(forecast: Forecast) {
@@ -119,5 +122,63 @@ class ForecastsActivity : AppCompatActivity() {
     private fun configurarBotonesDeZoom(grafico: LineChart, buttonZoomIn: ImageButton, buttonZoomOut: ImageButton) {
         buttonZoomIn.setOnClickListener { grafico.zoomIn() }
         buttonZoomOut.setOnClickListener { grafico.zoomOut() }
+    }
+
+    private fun configurarBotonesAyuda() {
+        binding.buttonHelpTemperatura.setOnClickListener {
+            mostrarDialogoAyuda(
+                this,
+                "Gráfico de Temperatura",
+                "Este gráfico muestra la temperatura diaria en grados Celsius, permitiendo visualizar las variaciones a lo largo del tiempo."
+            )
+        }
+
+        binding.buttonHelpHumedad.setOnClickListener {
+            mostrarDialogoAyuda(
+                this,
+                "Gráfico de Humedad",
+                "Este gráfico muestra el porcentaje de humedad relativa diaria, útil para entender las condiciones de humedad del aire que pueden afectar el cultivo."
+            )
+        }
+
+        binding.buttonHelpProbabilidadPrecipitacion.setOnClickListener {
+            mostrarDialogoAyuda(
+                this,
+                "Gráfico de Probabilidad de Precipitación",
+                "Este gráfico muestra la probabilidad de precipitación en porcentaje, lo cual es clave para planificar el riego de los cultivos."
+            )
+        }
+
+        binding.buttonHelpPrecipitacion.setOnClickListener {
+            mostrarDialogoAyuda(
+                this,
+                "Gráfico de Precipitación",
+                "Este gráfico muestra la cantidad de precipitación en milímetros (mm) por día, útil para el monitoreo del suministro de agua natural."
+            )
+        }
+
+        binding.buttonHelpEvapotranspiracion.setOnClickListener {
+            mostrarDialogoAyuda(
+                this,
+                "Gráfico de Evapotranspiración",
+                "Este gráfico muestra la evapotranspiración en milímetros (mm) por día, indicando cuánta agua pierde el suelo debido a la evaporación y la transpiración de las plantas."
+            )
+        }
+
+        binding.buttonHelpVelocidadViento.setOnClickListener {
+            mostrarDialogoAyuda(
+                this,
+                "Gráfico de Velocidad del Viento",
+                "Este gráfico muestra la velocidad del viento diaria en km/h, lo cual puede afectar la dispersión de semillas y el riesgo de erosión del suelo."
+            )
+        }
+
+        binding.buttonHelpHumedadSuelo.setOnClickListener {
+            mostrarDialogoAyuda(
+                this,
+                "Gráfico de Humedad del Suelo",
+                "Este gráfico muestra la humedad del suelo en m³/m³, importante para evaluar la disponibilidad de agua en el suelo para las raíces de los cultivos."
+            )
+        }
     }
 }
