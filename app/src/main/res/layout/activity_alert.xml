@@ -51,11 +51,11 @@
 
         <!-- Switch para la alerta roja de inundación -->
         <Switch
-            android:id="@+id/switchAlertRed"
+            android:id="@+id/switchCaudalAlto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Inundación Roja"
+            android:text="Caudal Alto"
             android:textColor="@android:color/black"
             android:textSize="14sp"
             android:thumbTint="@color/verde_icon"
@@ -63,11 +63,11 @@
 
         <!-- Switch para la alerta amarilla de inundación -->
         <Switch
-            android:id="@+id/switchAlertYellow"
+            android:id="@+id/switchCaudalModerado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Inundación Amarilla"
+            android:text="Caudal Moderado"
             android:textColor="@android:color/black"
             android:textSize="14sp"
             android:thumbTint="@color/verde_icon"
@@ -75,27 +75,28 @@
 
         <!-- Switch para la alerta roja de sequía -->
         <Switch
-            android:id="@+id/switchAlertDroughtRed"
+            android:id="@+id/switchCaudalBajo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Sequía Roja"
+            android:text="Caudal Bajo"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:thumbTint="@color/verde_icon"
+            android:trackTint="@android:color/black" />
+
+        <Switch
+            android:id="@+id/switchCaudalMuyBajo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Caudal Muy Bajo"
             android:textColor="@android:color/black"
             android:textSize="14sp"
             android:thumbTint="@color/verde_icon"
             android:trackTint="@android:color/black" />
 
         <!-- Switch para la alerta amarilla de sequía -->
-        <Switch
-            android:id="@+id/switchAlertDroughtYellow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Sequía Amarilla"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:thumbTint="@color/verde_icon"
-            android:trackTint="@android:color/black" />
     </GridLayout>
 
     <!-- Main ScrollView que contiene todas las secciones de alertas -->
@@ -116,37 +117,37 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Sección para Inundación Roja -->
+            <!-- Sección para Caudal Alto -->
             <TextView
-                android:id="@+id/textViewInundacionRoja"
+                android:id="@+id/textViewCaudalAlto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Inundación Roja"
+                android:text="Caudal Alto"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#B71C1C"
                 android:padding="8dp" />
 
             <ScrollView
-                android:id="@+id/scrollViewInundacionRoja"
+                android:id="@+id/scrollViewCaudalAlto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="vertical">
 
                 <LinearLayout
-                    android:id="@+id/alertsContainerInundacionRoja"
+                    android:id="@+id/alertsContainerCaudalAlto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
 
             </ScrollView>
 
-            <!-- Sección para Inundación Amarilla -->
+            <!-- Sección para Caudal Moderado -->
             <TextView
-                android:id="@+id/textViewInundacionAmarilla"
+                android:id="@+id/textViewCaudalModerado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Inundación Amarilla"
+                android:text="Caudal Moderado"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#A84F00"
@@ -154,25 +155,26 @@
                 android:layout_marginTop="16dp" />
 
             <ScrollView
-                android:id="@+id/scrollViewInundacionAmarilla"
+                android:id="@+id/scrollViewCaudalModerado"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="vertical">
 
                 <LinearLayout
-                    android:id="@+id/alertsContainerInundacionAmarilla"
+                    android:id="@+id/alertsContainerCaudalModerado"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
 
             </ScrollView>
 
-            <!-- Sección para Sequía Roja -->
+
+            <!-- Sección para Caudal Bajo -->
             <TextView
-                android:id="@+id/textViewSequiaRoja"
+                android:id="@+id/textViewCaudalBajo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sequía Roja"
+                android:text="Caudal Bajo"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#3E2723"
@@ -180,25 +182,26 @@
                 android:layout_marginTop="16dp" />
 
             <ScrollView
-                android:id="@+id/scrollViewSequiaRoja"
+                android:id="@+id/scrollViewCaudalBajo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="vertical">
 
                 <LinearLayout
-                    android:id="@+id/alertsContainerSequiaRoja"
+                    android:id="@+id/alertsContainerCaudalBajo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
 
             </ScrollView>
 
-            <!-- Sección para Sequía Amarilla -->
+
+            <!-- Sección para Caudal Muy Bajo -->
             <TextView
-                android:id="@+id/textViewSequiaAmarilla"
+                android:id="@+id/textViewCaudalMuyBajo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sequía Amarilla"
+                android:text="Caudal Muy Bajo"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#5D4037"
@@ -206,13 +209,13 @@
                 android:layout_marginTop="16dp" />
 
             <ScrollView
-                android:id="@+id/scrollViewSequiaAmarilla"
+                android:id="@+id/scrollViewCaudalMuyBajo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="vertical">
 
                 <LinearLayout
-                    android:id="@+id/alertsContainerSequiaAmarilla"
+                    android:id="@+id/alertsContainerCaudalMuyBajo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />

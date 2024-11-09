@@ -1,8 +1,8 @@
 package com.example.siembrasmart.models
 
 data class Alertas(
-    val alertaInundacionRoja: String,
-    val alertaInundacionAmarilla: String,
-    val alertaSequíaRoja: String,
-    val alertaSequíaAmarilla: String
+    val alertaCaudalAlto: String,
+    val alertaCaudalModerado: String,
+    val alertaCaudalMuyBajo: String,
+    val alertaCaudalBajo: String
 )

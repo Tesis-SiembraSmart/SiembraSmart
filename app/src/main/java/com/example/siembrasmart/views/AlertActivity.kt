@@ -83,19 +83,19 @@ class AlertActivity : Navigation() {
         }
 
         // Actualizar alertas cuando los switches cambien de estado
-        binding.switchAlertRed.setOnCheckedChangeListener { _, _ ->
+        binding.switchCaudalAlto.setOnCheckedChangeListener { _, _ ->
             getLocationAndFetchData()
         }
 
-        binding.switchAlertYellow.setOnCheckedChangeListener { _, _ ->
+        binding.switchCaudalModerado.setOnCheckedChangeListener { _, _ ->
             getLocationAndFetchData()
         }
 
-        binding.switchAlertDroughtRed.setOnCheckedChangeListener { _, _ ->
+        binding.switchCaudalMuyBajo.setOnCheckedChangeListener { _, _ ->
             getLocationAndFetchData()
         }
 
-        binding.switchAlertDroughtYellow.setOnCheckedChangeListener { _, _ ->
+        binding.switchCaudalBajo.setOnCheckedChangeListener { _, _ ->
             getLocationAndFetchData()
         }
 
@@ -116,52 +116,50 @@ class AlertActivity : Navigation() {
                         alertController.fetchWeatherData(it.latitude, it.longitude) { alertas ->
                             runOnUiThread {
                                 // Limpiar los contenedores de alertas antes de agregar nuevas
-                                binding.alertsContainerInundacionRoja.removeAllViews()
-                                binding.alertsContainerInundacionAmarilla.removeAllViews()
-                                binding.alertsContainerSequiaRoja.removeAllViews()
-                                binding.alertsContainerSequiaAmarilla.removeAllViews()
+                                binding.alertsContainerCaudalAlto.removeAllViews()
+                                binding.alertsContainerCaudalModerado.removeAllViews()
+                                binding.alertsContainerCaudalMuyBajo.removeAllViews()
+                                binding.alertsContainerCaudalBajo.removeAllViews()
 
-                                // Agregar alertas de inundación roja si el switch está activado
-                                if (binding.switchAlertRed.isChecked) {
+                                if (binding.switchCaudalAlto.isChecked) {
                                     addAlertsToContainer(
-                                        alertas.alertaInundacionRoja,
+                                        alertas.alertaCaudalAlto,
                                         "🌊",
                                         "#B71C1C",
                                         "#FFCDD2",
-                                        binding.alertsContainerInundacionRoja
+                                        binding.alertsContainerCaudalAlto
                                     )
                                 }
 
-                                // Agregar alertas de inundación amarilla
-                                if (binding.switchAlertYellow.isChecked) {
+                                if (binding.switchCaudalModerado.isChecked) {
                                     addAlertsToContainer(
-                                        alertas.alertaInundacionAmarilla,
+                                        alertas.alertaCaudalModerado,
                                         "💧",
                                         "#A84F00",
                                         "#FFF9C4",
-                                        binding.alertsContainerInundacionAmarilla
+                                        binding.alertsContainerCaudalModerado
                                     )
                                 }
 
                                 // Agregar alertas de sequía roja
-                                if (binding.switchAlertDroughtRed.isChecked) {
+                                if (binding.switchCaudalMuyBajo.isChecked) {
                                     addAlertsToContainer(
-                                        alertas.alertaSequíaRoja,
+                                        alertas.alertaCaudalMuyBajo,
                                         "🌵",
                                         "#3E2723",
                                         "#D7CCC8",
-                                        binding.alertsContainerSequiaRoja
+                                        binding.alertsContainerCaudalMuyBajo
                                     )
                                 }
 
                                 // Agregar alertas de sequía amarilla
-                                if (binding.switchAlertDroughtYellow.isChecked) {
+                                if (binding.switchCaudalBajo.isChecked) {
                                     addAlertsToContainer(
-                                        alertas.alertaSequíaAmarilla,
+                                        alertas.alertaCaudalBajo,
                                         "☀️",
                                         "#5D4037",
                                         "#EFEBE9",
-                                        binding.alertsContainerSequiaAmarilla
+                                        binding.alertsContainerCaudalBajo
                                     )
                                 }
 
@@ -211,19 +209,19 @@ class AlertActivity : Navigation() {
     }
 
     private fun handleEmptyContainers() {
-        // Inundación Roja
-        if (binding.alertsContainerInundacionRoja.childCount == 0) {
+        // Caudal Alto
+        if (binding.alertsContainerCaudalAlto.childCount == 0) {
             val message: String
             val icon: String
             val iconColor: String
             val backgroundColor: String
-            if (binding.switchAlertRed.isChecked) {
-                message = "No hay alertas de inundación roja en este momento."
+            if (binding.switchCaudalAlto.isChecked) {
+                message = "No hay alertas de caudal alto en este momento."
                 icon = "🌊"
                 iconColor = "#B71C1C"
                 backgroundColor = "#FFCDD2"
             } else {
-                message = "Alerta de inundación roja oculta."
+                message = "Alerta de caudal alto oculta."
                 icon = "🙈"
                 iconColor = "#B71C1C"
                 backgroundColor = "#FFCDD2"
@@ -233,23 +231,23 @@ class AlertActivity : Navigation() {
                 icon,
                 iconColor,
                 backgroundColor,
-                binding.alertsContainerInundacionRoja
+                binding.alertsContainerCaudalAlto
             )
         }
 
-        // Inundación Amarilla
-        if (binding.alertsContainerInundacionAmarilla.childCount == 0) {
+        // Caudal Moderado
+        if (binding.alertsContainerCaudalModerado.childCount == 0) {
             val message: String
             val icon: String
             val iconColor: String
             val backgroundColor: String
-            if (binding.switchAlertYellow.isChecked) {
-                message = "No hay alertas de inundación amarilla en este momento."
+            if (binding.switchCaudalModerado.isChecked) {
+                message = "No hay alertas de caudal moderado en este momento."
                 icon = "💧"
                 iconColor = "#A84F00"
                 backgroundColor = "#FFF9C4"
             } else {
-                message = "Alerta de inundación amarilla oculta."
+                message = "Alerta de caudal moderado oculta."
                 icon = "🙈"
                 iconColor = "#A84F00"
                 backgroundColor = "#FFF9C4"
@@ -259,23 +257,23 @@ class AlertActivity : Navigation() {
                 icon,
                 iconColor,
                 backgroundColor,
-                binding.alertsContainerInundacionAmarilla
+                binding.alertsContainerCaudalModerado
             )
         }
 
-        // Sequía Roja
-        if (binding.alertsContainerSequiaRoja.childCount == 0) {
+        // Caudal Bajo
+        if (binding.alertsContainerCaudalBajo.childCount == 0) {
             val message: String
             val icon: String
             val iconColor: String
             val backgroundColor: String
-            if (binding.switchAlertDroughtRed.isChecked) {
-                message = "No hay alertas de sequía roja en este momento."
+            if (binding.switchCaudalBajo.isChecked) {
+                message = "No hay alertas de caudal bajo en este momento."
                 icon = "🌵"
                 iconColor = "#3E2723"
                 backgroundColor = "#D7CCC8"
             } else {
-                message = "Alerta de sequía roja oculta."
+                message = "Alerta de caudal bajo oculta."
                 icon = "🙈"
                 iconColor = "#3E2723"
                 backgroundColor = "#D7CCC8"
@@ -285,23 +283,23 @@ class AlertActivity : Navigation() {
                 icon,
                 iconColor,
                 backgroundColor,
-                binding.alertsContainerSequiaRoja
+                binding.alertsContainerCaudalBajo
             )
         }
 
-        // Sequía Amarilla
-        if (binding.alertsContainerSequiaAmarilla.childCount == 0) {
+        // Caudal Muy Bajo
+        if (binding.alertsContainerCaudalMuyBajo.childCount == 0) {
             val message: String
             val icon: String
             val iconColor: String
             val backgroundColor: String
-            if (binding.switchAlertDroughtYellow.isChecked) {
-                message = "No hay alertas de sequía amarilla en este momento."
+            if (binding.switchCaudalMuyBajo.isChecked) {
+                message = "No hay alertas de caudal muy bajo en este momento."
                 icon = "☀️"
                 iconColor = "#5D4037"
                 backgroundColor = "#EFEBE9"
             } else {
-                message = "Alerta de sequía amarilla oculta."
+                message = "Alerta de caudal muy bajo oculta."
                 icon = "🙈"
                 iconColor = "#5D4037"
                 backgroundColor = "#EFEBE9"
@@ -311,10 +309,11 @@ class AlertActivity : Navigation() {
                 icon,
                 iconColor,
                 backgroundColor,
-                binding.alertsContainerSequiaAmarilla
+                binding.alertsContainerCaudalMuyBajo
             )
         }
     }
+
 
     private fun showAlert(time: Long, title: String, message: String) {
         val date = Date(time)

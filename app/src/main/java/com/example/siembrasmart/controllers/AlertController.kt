@@ -16,9 +16,9 @@ class AlertController {
 
     // Listas para almacenar los datos
     private val times: MutableList<String> = mutableListOf()
-    private val descargaRioMax: MutableList<Double> = mutableListOf()
-    private val descargaRioMedia: MutableList<Double> = mutableListOf()
-    private val descargaRioMin: MutableList<Double> = mutableListOf()
+    private val caudalRioMax: MutableList<Double> = mutableListOf()
+    private val caudalRioMedia: MutableList<Double> = mutableListOf()
+    private val caudalRioMin: MutableList<Double> = mutableListOf()
 
     suspend fun fetchWeatherData(latitud: Double, longitud: Double, onResult: (Alertas) -> Unit) {
         withContext(Dispatchers.IO) {
@@ -38,30 +38,30 @@ class AlertController {
 
                     // Limpiamos las listas antes de agregar nuevos datos
                     times.clear()
-                    descargaRioMax.clear()
-                    descargaRioMedia.clear()
-                    descargaRioMin.clear()
+                    caudalRioMax.clear()
+                    caudalRioMedia.clear()
+                    caudalRioMin.clear()
 
                     val allTimes = jsonArrayToStringList(dailyData.getJSONArray("time"))
-                    val allDescargaRioMax = jsonArrayToDoubleList(dailyData.getJSONArray("river_discharge_max"))
-                    val allDescargaRioMedia = jsonArrayToDoubleList(dailyData.getJSONArray("river_discharge_mean"))
-                    val allDescargaRioMin = jsonArrayToDoubleList(dailyData.getJSONArray("river_discharge_min"))
+                    val allCaudalRioMax = jsonArrayToDoubleList(dailyData.getJSONArray("river_discharge_max"))
+                    val allCaudalRioMedia = jsonArrayToDoubleList(dailyData.getJSONArray("river_discharge_mean"))
+                    val allCaudalRioMin = jsonArrayToDoubleList(dailyData.getJSONArray("river_discharge_min"))
 
-                    filterDataFromToday(allTimes, allDescargaRioMax, allDescargaRioMedia, allDescargaRioMin)
+                    filterDataFromToday(allTimes, allCaudalRioMax, allCaudalRioMedia, allCaudalRioMin)
 
-                    val maxThresholdRed = calculateThresholdRed(descargaRioMax)
-                    val meanThresholdYellow = calculateThresholdYellow(descargaRioMedia)
-                    val droughtThresholdRed = calculateDroughtThresholdRed(descargaRioMin)
-                    val droughtThresholdYellow = calculateDroughtThresholdYellow(descargaRioMin)
+                    val thresholdCaudalAlto = calculateThresholdRed(caudalRioMax)
+                    val thresholdCaudalModerado = calculateThresholdYellow(caudalRioMedia)
+                    val thresholdCaudalMuyBajo = calculatethresholdCaudalMuyBajo(caudalRioMin)
+                    val thresholdCaudalBajo = calculatethresholdCaudalBajo(caudalRioMin)
 
-                    val alertas = generateFloodAndDroughtAlerts(
-                        descargaRioMax,
-                        descargaRioMedia,
-                        descargaRioMin,
-                        maxThresholdRed,
-                        meanThresholdYellow,
-                        droughtThresholdRed,
-                        droughtThresholdYellow
+                    val alertas = generateCaudalAlerts(
+                        caudalRioMax,
+                        caudalRioMedia,
+                        caudalRioMin,
+                        thresholdCaudalAlto,
+                        thresholdCaudalModerado,
+                        thresholdCaudalMuyBajo,
+                        thresholdCaudalBajo
                     )
 
                     onResult(alertas)  // Devolvemos las alertas al Activity
@@ -72,75 +72,75 @@ class AlertController {
 
     private fun filterDataFromToday(
         allTimes: MutableList<String>,
-        allDescargaRioMax: MutableList<Double>,
-        allDescargaRioMedia: MutableList<Double>,
-        allDescargaRioMin: MutableList<Double>
+        allCaudalRioMax: MutableList<Double>,
+        allCaudalRioMedia: MutableList<Double>,
+        allCaudalRioMin: MutableList<Double>
     ) {
         val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         for (i in allTimes.indices) {
             if (allTimes[i] >= today) {
                 times.add(allTimes[i])
-                descargaRioMax.add(allDescargaRioMax[i])
-                descargaRioMedia.add(allDescargaRioMedia[i])
-                descargaRioMin.add(allDescargaRioMin[i])
+                caudalRioMax.add(allCaudalRioMax[i])
+                caudalRioMedia.add(allCaudalRioMedia[i])
+                caudalRioMin.add(allCaudalRioMin[i])
             }
         }
     }
 
-    private fun generateFloodAndDroughtAlerts(
-        dischargeMax: MutableList<Double>,
-        dischargeMean: MutableList<Double>,
-        dischargeMin: MutableList<Double>,
-        maxThresholdRed: Double,
-        meanThresholdYellow: Double,
-        droughtThresholdRed: Double,
-        droughtThresholdYellow: Double
+    private fun generateCaudalAlerts(
+        caudalMax: MutableList<Double>,
+        caudalMean: MutableList<Double>,
+        caudalMin: MutableList<Double>,
+        thresholdCaudalAlto: Double,
+        thresholdCaudalModerado: Double,
+        thresholdCaudalMuyBajo: Double,
+        thresholdCaudalBajo: Double
     ): Alertas {
-        val inundacionRoja = StringBuilder()
-        val inundacionAmarilla = StringBuilder()
-        val sequiaRoja = StringBuilder()
-        val sequiaAmarilla = StringBuilder()
+        val caudalAlto = StringBuilder()
+        val caudalModerado = StringBuilder()
+        val caudalMuyBajo = StringBuilder()
+        val caudalBajo = StringBuilder()
 
-        for (i in dischargeMax.indices) {
-            if (dischargeMax[i] > maxThresholdRed) {
-                inundacionRoja.append("¡Predicción de Alerta Roja de Inundación! El ${times[i]}, la descarga máxima del río se estima en ${dischargeMax[i]} m³/s.\n")
-            } else if (dischargeMean[i] > meanThresholdYellow) {
-                inundacionAmarilla.append("Predicción de Alerta Amarilla de Inundación: El ${times[i]}, se estima que la descarga media del río será de ${dischargeMean[i]} m³/s.\n")
+        for (i in caudalMax.indices) {
+            if (caudalMax[i] > thresholdCaudalAlto) {
+                caudalAlto.append("¡Predicción de Alerta de Caudal Alto! El ${times[i]}, la descarga máxima del río se estima en ${caudalMax[i]} m³/s.\n")
+            } else if (caudalMean[i] > thresholdCaudalModerado) {
+                caudalModerado.append("Predicción de Alerta de Caudal Moderado: El ${times[i]}, se estima que la descarga media del río será de ${caudalMean[i]} m³/s.\n")
             }
 
-            if (dischargeMin[i] < droughtThresholdRed) {
-                sequiaRoja.append("¡Predicción de Alerta Roja de Sequía! El ${times[i]}, se espera que la descarga mínima del río sea de ${dischargeMin[i]} m³/s.\n")
-            } else if (dischargeMin[i] < droughtThresholdYellow) {
-                sequiaAmarilla.append("Predicción de Alerta Amarilla de Sequía: El ${times[i]}, se estima que la descarga mínima del río será de ${dischargeMin[i]} m³/s.\n")
+            if (caudalMin[i] < thresholdCaudalMuyBajo) {
+                caudalMuyBajo.append("¡Predicción de Alerta de Caudal Muy Bajo! El ${times[i]}, se espera que la descarga mínima del río sea de ${caudalMin[i]} m³/s.\n")
+            } else if (caudalMin[i] < thresholdCaudalBajo) {
+                caudalBajo.append("Predicción de Alerta de Caudal Bajo: El ${times[i]}, se estima que la descarga mínima del río será de ${caudalMin[i]} m³/s.\n")
             }
         }
 
         return Alertas(
-            alertaInundacionRoja = inundacionRoja.toString(),
-            alertaInundacionAmarilla = inundacionAmarilla.toString(),
-            alertaSequíaRoja = sequiaRoja.toString(),
-            alertaSequíaAmarilla = sequiaAmarilla.toString()
+            alertaCaudalAlto = caudalAlto.toString(),
+            alertaCaudalModerado = caudalModerado.toString(),
+            alertaCaudalMuyBajo = caudalMuyBajo.toString(),
+            alertaCaudalBajo = caudalBajo.toString()
         )
     }
 
-    private fun calculateThresholdRed(descargaRioMax: MutableList<Double>): Double {
-        return descargaRioMax.maxOrNull()?.times(0.9) ?: 150.0
+    private fun calculateThresholdRed(caudalRioMax: MutableList<Double>): Double {
+        return caudalRioMax.maxOrNull()?.times(0.9) ?: 150.0
     }
 
-    private fun calculateThresholdYellow(descargaRioMedia: MutableList<Double>): Double {
-        return if (descargaRioMedia.isNotEmpty()) {
-            descargaRioMedia.average().times(1.1)
+    private fun calculateThresholdYellow(caudalRioMedia: MutableList<Double>): Double {
+        return if (caudalRioMedia.isNotEmpty()) {
+            caudalRioMedia.average().times(1.1)
         } else {
             100.0
         }
     }
 
-    private fun calculateDroughtThresholdRed(descargaRioMin: MutableList<Double>): Double {
-        return descargaRioMin.minOrNull()?.times(1.1) ?: 70.0
+    private fun calculatethresholdCaudalMuyBajo(caudalRioMin: MutableList<Double>): Double {
+        return caudalRioMin.minOrNull()?.times(1.1) ?: 70.0
     }
 
-    private fun calculateDroughtThresholdYellow(descargaRioMin: MutableList<Double>): Double {
-        return descargaRioMin.average().times(1.2)
+    private fun calculatethresholdCaudalBajo(caudalRioMin: MutableList<Double>): Double {
+        return caudalRioMin.average().times(1.2)
     }
 
     suspend fun fetchDatosOpenMeteo(
