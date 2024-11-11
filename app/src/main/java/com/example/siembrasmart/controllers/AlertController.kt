@@ -49,10 +49,10 @@
 
                         filterDataFromToday(allTimes, allCaudalRioMax, allCaudalRioMedia, allCaudalRioMin)
 
-                        val thresholdCaudalAlto = calculateThresholdRed(caudalRioMax)
-                        val thresholdCaudalModerado = calculateThresholdYellow(caudalRioMedia)
-                        val thresholdCaudalMuyBajo = calculatethresholdCaudalMuyBajo(caudalRioMin)
-                        val thresholdCaudalBajo = calculatethresholdCaudalBajo(caudalRioMin)
+                        val thresholdCaudalAlto = calcularUmbralCaudalAlto(caudalRioMax)
+                        val thresholdCaudalModerado = calcularUmbralCaudalModerado(caudalRioMedia)
+                        val thresholdCaudalMuyBajo = calcularUmbralCaudalMuyBajo(caudalRioMin)
+                        val thresholdCaudalBajo = calcularUmbralCaudalBajo(caudalRioMin)
 
                         val alertas = generateCaudalAlerts(
                             caudalRioMax,
@@ -123,11 +123,11 @@
             )
         }
 
-        private fun calculateThresholdRed(caudalRioMax: MutableList<Double>): Double {
+        private fun calcularUmbralCaudalAlto(caudalRioMax: MutableList<Double>): Double {
             return caudalRioMax.maxOrNull()?.times(0.9) ?: 150.0
         }
 
-        private fun calculateThresholdYellow(caudalRioMedia: MutableList<Double>): Double {
+        private fun calcularUmbralCaudalModerado(caudalRioMedia: MutableList<Double>): Double {
             return if (caudalRioMedia.isNotEmpty()) {
                 caudalRioMedia.average().times(1.1)
             } else {
@@ -135,11 +135,11 @@
             }
         }
 
-        private fun calculatethresholdCaudalMuyBajo(caudalRioMin: MutableList<Double>): Double {
+        private fun calcularUmbralCaudalMuyBajo(caudalRioMin: MutableList<Double>): Double {
             return caudalRioMin.minOrNull()?.times(1.1) ?: 70.0
         }
 
-        private fun calculatethresholdCaudalBajo(caudalRioMin: MutableList<Double>): Double {
+        private fun calcularUmbralCaudalBajo(caudalRioMin: MutableList<Double>): Double {
             return caudalRioMin.average().times(1.2)
         }
 
