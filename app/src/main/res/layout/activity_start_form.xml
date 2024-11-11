@@ -192,10 +192,10 @@
                                 android:id="@+id/cardTitle3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Opción 3"
+                                android:layout_marginBottom="4dp"
+                                android:text="Maíz"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                android:textStyle="bold"
-                                android:layout_marginBottom="4dp" />
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/cardDescription3"
@@ -210,8 +210,8 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/ic_launcher_foreground"
-                            android:contentDescription="Logo Opción 3" />
+                            android:contentDescription="Logo Opción 3"
+                            android:src="@drawable/maiz" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -247,10 +247,10 @@
                                 android:id="@+id/cardTitle4"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Opción 4"
+                                android:layout_marginBottom="4dp"
+                                android:text="Frijol"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                android:textStyle="bold"
-                                android:layout_marginBottom="4dp" />
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/cardDescription4"
@@ -265,8 +265,8 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/ic_launcher_foreground"
-                            android:contentDescription="Logo Opción 1" />
+                            android:contentDescription="Logo Opción 1"
+                            android:src="@drawable/frijoles" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 

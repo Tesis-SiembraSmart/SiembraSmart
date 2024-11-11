@@ -1,12 +1,9 @@
 package com.example.siembrasmart.views
-
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.siembrasmart.MainActivity
 import com.example.siembrasmart.controllers.StartFormController
-import com.example.siembrasmart.databinding.ActivitySignupBinding
 import com.example.siembrasmart.databinding.ActivityStartFormBinding
 import com.google.firebase.auth.FirebaseAuth
 
@@ -22,18 +19,26 @@ class StartFormActivity : AppCompatActivity() {
 
         val userId = FirebaseAuth.getInstance().currentUser?.uid
 
+        if (userId != null) {
+            // Fetch and pre-select the user's saved models
+            controller.getSelectedModels(userId) { selectedModels ->
+                selectedModels?.let {
+                    binding.CheckBox1.isChecked = it.contains("Modelo cacao")
+                    binding.CheckBox2.isChecked = it.contains("Modelo cafe")
+                    binding.CheckBox3.isChecked = it.contains("Modelo maíz")
+                    binding.CheckBox4.isChecked = it.contains("Modelo frijol")
+                }
+            }
+        }
+
         binding.acceptButton.setOnClickListener {
             if (userId != null) {
-                // Lista para almacenar los modelos seleccionados
                 val selectedModels = mutableListOf<String>()
-
-                // Añade los modelos seleccionados a la lista
                 if (binding.CheckBox1.isChecked) selectedModels.add("Modelo cacao")
                 if (binding.CheckBox2.isChecked) selectedModels.add("Modelo cafe")
-                if (binding.CheckBox3.isChecked) selectedModels.add("Modelo 3")
-                if (binding.CheckBox4.isChecked) selectedModels.add("Modelo 4")
+                if (binding.CheckBox3.isChecked) selectedModels.add("Modelo maíz")
+                if (binding.CheckBox4.isChecked) selectedModels.add("Modelo frijol")
 
-                // Verifica si al menos una opción está seleccionada
                 if (selectedModels.isNotEmpty()) {
                     controller.saveSelectedModels(userId, selectedModels) { success ->
                         if (success) {

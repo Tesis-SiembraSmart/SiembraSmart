@@ -1,6 +1,7 @@
 package com.example.siembrasmart.views
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -57,6 +58,11 @@ class RegistroCultivoActivity : AppCompatActivity() {
 
         binding.guardarButton.setOnClickListener {
             saveCultivo()
+        }
+        binding.noGuardar.setOnClickListener {
+            val intent = Intent(this, ClimaActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 
