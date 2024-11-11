@@ -39,14 +39,12 @@ class UserProfileActivity : AppCompatActivity() {
         binding.saveChangesButton.setOnClickListener {
             val updatedFirstName = binding.firstNameTextView.text.toString().trim()
             val updatedLastName = binding.lastNameTextView.text.toString().trim()
-            val updatedEmail = binding.emailTextView.text.toString().trim()
             val updatedPhoneNumber = binding.phoneNumberTextView.text.toString().trim()
 
             controller.saveUserProfile(
                 userId,
                 updatedFirstName,
                 updatedLastName,
-                updatedEmail,
                 updatedPhoneNumber
             ) { success ->
                 if (success) {
@@ -61,7 +59,7 @@ class UserProfileActivity : AppCompatActivity() {
             if (user != null) {
                 binding.firstNameTextView.setText(user.firstName)
                 binding.lastNameTextView.setText(user.lastName)
-                binding.emailTextView.setText(user.email)
+                binding.emailTextView.text = user.email
                 binding.phoneNumberTextView.setText(user.phoneNumber)
             } else {
                 // Error al cargar el perfil

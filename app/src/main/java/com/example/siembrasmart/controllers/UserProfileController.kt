@@ -27,11 +27,10 @@ class UserProfileController(private val context: Context) {
         userId: String,
         updatedFirstName: String,
         updatedLastName: String,
-        updatedEmail: String,
         updatedPhoneNumber: String,
         onSaveComplete: (Boolean) -> Unit
     ) {
-        if (updatedFirstName.isEmpty() || updatedLastName.isEmpty() || updatedEmail.isEmpty() || updatedPhoneNumber.isEmpty()) {
+        if (updatedFirstName.isEmpty() || updatedLastName.isEmpty() || updatedPhoneNumber.isEmpty()) {
             Toast.makeText(context, "Por favor completa todos los campos.", Toast.LENGTH_SHORT).show()
             onSaveComplete(false)
             return
@@ -40,7 +39,6 @@ class UserProfileController(private val context: Context) {
         val updatedUserData = mapOf(
             "firstName" to updatedFirstName,
             "lastName" to updatedLastName,
-            "email" to updatedEmail,
             "phoneNumber" to updatedPhoneNumber,
         )
 

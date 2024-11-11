@@ -37,13 +37,14 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp" />
 
-        <EditText
-            android:id="@+id/tipoCultivo"
+        <TextView
+            android:id="@+id/tipoCultivoTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Ej: Grano"
-            android:inputType="textCapWords"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:background="@android:color/darker_gray"
+            android:text="Tipo de cultivo será detectado automáticamente"
+            android:textColor="@color/black" />
 
         <!-- Fecha de Inicio -->
         <TextView
@@ -119,22 +120,6 @@
             android:padding="12dp" />
 
         <!-- ID del Cultivo -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ID del Cultivo"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp" />
-
-        <EditText
-            android:id="@+id/idCultivo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ej: 123ABC"
-            android:inputType="text"
-            android:padding="12dp" />
 
         <!-- Botón Guardar -->
         <Button

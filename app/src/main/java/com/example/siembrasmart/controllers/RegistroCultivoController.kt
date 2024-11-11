@@ -36,6 +36,15 @@ class RegistroCultivoController(private val context: Context) {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
     }
+    fun detectarTipoCultivo(nombre: String): String {
+        return when (nombre) {
+            "Cacao" -> "Grano"
+            "Maíz" -> "Cereal"
+            "Café" -> "Grano"
+            "Frijol" -> "Leguminosa"
+            else -> "Otro" // Para cultivos que no estén en la lista
+        }
+    }
 
     fun obtenerUbicacionActual(callback: (Double, Double) -> Unit) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -63,8 +72,16 @@ class RegistroCultivoController(private val context: Context) {
         userRef.get().addOnSuccessListener { snapshot ->
             val usuario = snapshot.getValue<Usuario>() ?: Usuario()
 
-            val updatedCultivos = usuario.cultivos.toMutableList()
-            updatedCultivos.add(cultivo)
+            // Generar una nueva referencia con ID automático para el cultivo
+            val cultivoRef = userRef.child("cultivos").push()
+            val cultivoId = cultivoRef.key ?: return@addOnSuccessListener
+
+            // Asignar el ID generado automáticamente al cultivo
+            val cultivoConId = cultivo.copy(id = cultivoId)
+
+            val updatedCultivos = usuario.cultivos.toMutableList().apply {
+                add(cultivoConId)
+            }
             usuario.cultivos = updatedCultivos
 
             userRef.setValue(usuario)
@@ -74,4 +91,5 @@ class RegistroCultivoController(private val context: Context) {
             callback(false)
         }
     }
+
 }

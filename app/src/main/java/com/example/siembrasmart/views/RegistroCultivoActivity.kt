@@ -2,6 +2,8 @@ package com.example.siembrasmart.views
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +31,19 @@ class RegistroCultivoActivity : AppCompatActivity() {
 
         // Configurar el Spinner desde el controlador
         controller.setupCultivoSpinner(binding.nombreCultivoSpinner)
+
+        // Configurar el listener para el Spinner
+        binding.nombreCultivoSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val nombre = binding.nombreCultivoSpinner.selectedItem.toString()
+                val tipo = controller.detectarTipoCultivo(nombre) // Detectar tipo automáticamente
+                binding.tipoCultivoTextView.text = tipo // Actualizar el TextView con el tipo
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // No hacer nada si no hay selección
+            }
+        }
 
         // Obtener ubicación desde el controlador y actualizar la UI
         controller.obtenerUbicacionActual { latitud, longitud ->
@@ -64,21 +79,19 @@ class RegistroCultivoActivity : AppCompatActivity() {
 
     private fun saveCultivo() {
         val nombre = binding.nombreCultivoSpinner.selectedItem.toString()
-        val tipo = binding.tipoCultivo.text.toString()
+        val tipo = binding.tipoCultivoTextView.text.toString() // Obtener el tipo del TextView actualizado
         val latitud = binding.latitudCultivo.text.toString().toDoubleOrNull() ?: 0.0
         val longitud = binding.longitudCultivo.text.toString().toDoubleOrNull() ?: 0.0
         val area = binding.areaCultivo.text.toString().toDoubleOrNull() ?: 0.0
         val fechaInicio = selectedDate ?: Date()
-        val idCultivo = binding.idCultivo.text.toString()
 
         val cultivo = Cultivo(
             nombre = nombre,
-            tipo = tipo,
+            tipo = tipo, // Asigna el tipo detectado automáticamente
             fechaInicio = fechaInicio,
             latitud = latitud,
             longitud = longitud,
             area = area,
-            id = idCultivo
         )
 
         controller.saveCultivoForCurrentUser(cultivo) { success ->
@@ -90,4 +103,5 @@ class RegistroCultivoActivity : AppCompatActivity() {
             }
         }
     }
+
 }
