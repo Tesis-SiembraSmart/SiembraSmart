@@ -3,108 +3,108 @@
 package "com.example.siembrasmart" {
 
     package controllers {
-        class NewsController {
-            + filterNewsByCountry(country: String): List<News>
-            + loadNewsForCrops(crops: List<String>): void
-        }
-
-        class ConsejosController {
-            + loadConsejos(): List<Consejo>
-            + filterConsejosByTopic(topic: String): List<Consejo>
-        }
-
-        class ForecastController {
-            + fetchWeatherForecast(location: Location): Forecast
-            + updateForecast(forecast: Forecast): void
-        }
-
-        class AlertController {
-            + fetchCaudalAlerts(): List<Alertas>
-            + setCaudalThresholds(caudalAltoLevel: Double, caudalBajoLevel: Double): void
-            + sendCaudalAlertNotifications(): void
-        }
-
-        class ClimaController {
-            + getCurrentWeather(location: Location): Clima
-            + updateClimaData(clima: Clima): void
-        }
-
-        class RegistroCultivoController {
-            + registerNewCultivo(cultivo: Cultivo): void
-            + updateCultivoInfo(cultivoId: String, updatedCultivo: Cultivo): void
-        }
-
-        class SignupController {
-            + signUpUser(email: String, password: String): Boolean
-            + validateUserInfo(user: Usuario): Boolean
+        class UserProfileController {
+        + loadUserProfile(userId: String, onDataLoaded: (Usuario?) -> Unit): void
+        + saveUserProfile(userId: String, updatedFirstName: String, updatedLastName: String, updatedPhoneNumber: String, onSaveComplete: (Boolean) -> Unit): void
+        + signOut(): void
         }
 
         class StartFormController {
             + saveSelectedModels(userId: String, selectedModels: List<String>, callback: (Boolean) -> Unit): void
         }
 
-        class UserProfileController {
-            + loadUserProfile(userId: String, onDataLoaded: (Usuario?) -> Unit): void
-            + saveUserProfile(userId: String, updatedUserData: Map<String, String>, onSaveComplete: (Boolean) -> Unit): void
-            + signOut(): void
+        class SignupController {
+            + createAccount(email: String, password: String, firstName: String, lastName: String, phoneNumber: String, activity: SignupActivity): void
+            + saveUserToDatabase(userId: String, user: Usuario, activity: SignupActivity): void
+        }
+
+        class RegistroCultivoController {
+            + obtenerUbicacionActual(callback: (Double, Double) -> Unit): void
+            + saveCultivoForCurrentUser(cultivo: Cultivo, callback: (Boolean) -> Unit): void
+        }
+
+        class NewsController {
+            + generarUrlParaNoticias(cultivo: String, soloColombia: Boolean): String
+            + cargarUrlEnWebView(webView: WebView, url: String): void
+        }
+
+        class ForecastController {
+            + crearGrafico(entradas: List<Entry>, label: String, tiempos: List<String>, grafico: LineChart, context: Context): void
+        }
+
+        class ConsejosController {
+            + makePredictionRequest(data: JSONObject, callback: (String) -> Unit): void
+            + configurarSpinner(userId: String, spinner: Spinner, onItemSelected: (String) -> Unit): void
+        }
+
+        class ClimaController {
+            + obtenerDatosClima(callback: (Clima) -> Unit): void
+            + updateMap(map: GoogleMap): void
+            + navigateToForecast(activity: ClimaActivity): void
+        }
+
+        class AlertController {
+            + fetchWeatherData(latitud: Double, longitud: Double, onResult: (Alertas) -> Unit): void
+            + generateCaudalAlerts(caudalMax: MutableList<Double>, caudalMean: MutableList<Double>, caudalMin: MutableList<Double>, thresholdCaudalAlto: Double, thresholdCaudalModerado: Double, thresholdCaudalMuyBajo: Double, thresholdCaudalBajo: Double): Alertas
         }
     }
 
     package models {
-        class Alertas {
-            + thresholdCaudalAlto: Double
-            + thresholdCaudalBajo: Double
-            + alertaCaudalMuyBajo: String
-            + alertaCaudalBajo: String
-        }
+           class Usuario {
+               + firstName: String
+               + lastName: String
+               + email: String
+               + phoneNumber: String
+               + modelosUsados: List<String>
+               + cultivos: List<Cultivo>
+           }
 
-        class Clima {
-            + temperatura: Double
-            + humedad: Int
-            + aparenteTemperatura: Double
-            + precipitacion: Double
-            + nubosidad: Int
-            + velocidadViento: Double
-            + temperaturas: MutableList<Double>
-            + humedades: MutableList<Int>
-            + probabilidadesPrecipitacion: MutableList<Int>
-            + precipitaciones: MutableList<Double>
-            + evapotranspiraciones: MutableList<Double>
-            + velocidadesViento: MutableList<Double>
-            + humedadesSuelo: MutableList<Double>
-            + times: MutableList<String>
-        }
+           class Forecast {
+               + temperaturas: List<Double>
+               + humedades: List<Int>
+               + probabilidadesPrecipitacion: List<Int>
+               + precipitaciones: List<Double>
+               + evapotranspiraciones: List<Double>
+               + velocidadesViento: List<Double>
+               + humedadesSuelo: List<Double>
+               + tiempos: List<String>
+           }
 
-        class Forecast {
-            + temperaturas: List<Double>
-            + humedades: List<Int>
-            + probabilidadesPrecipitacion: List<Int>
-            + precipitaciones: List<Double>
-            + evapotranspiraciones: List<Double>
-            + velocidadesViento: List<Double>
-            + humedadesSuelo: List<Double>
-            + tiempos: List<String>
-        }
+           class Cultivo {
+               + nombre: String
+               + tipo: String
+               + fechaInicio: Date
+               + latitud: Double
+               + longitud: Double
+               + area: Double
+               + id: String
+           }
 
-        class Cultivo {
-            + nombre: String
-            + tipo: String
-            + fechaInicio: Date
-            + latitud: Double
-            + longitud: Double
-            + area: Double
-            + id: String
-        }
+           class Clima {
+               + temperatura: Double
+               + humedad: Int
+               + aparenteTemperatura: Double
+               + precipitacion: Double
+               + nubosidad: Int
+               + velocidadViento: Double
+               + temperaturas: MutableList<Double>
+               + humedades: MutableList<Int>
+               + probabilidadesPrecipitacion: MutableList<Int>
+               + precipitaciones: MutableList<Double>
+               + evapotranspiraciones: MutableList<Double>
+               + velocidadesViento: MutableList<Double>
+               + humedadesSuelo: MutableList<Double>
+               + times: MutableList<String>
+           }
 
-        class Usuario {
-            + firstName: String
-            + lastName: String
-            + email: String
-            + phoneNumber: String
-            + modelosUsados: List<String>
-            + cultivos: List<Cultivo>
-        }
-    }
+           class Alertas {
+               + alertaCaudalAlto: String
+               + alertaCaudalModerado: String
+               + alertaCaudalMuyBajo: String
+               + alertaCaudalBajo: String
+           }
+
+       }
 
     package utils {
         class CustomMarkerView {
@@ -126,56 +126,74 @@ package "com.example.siembrasmart" {
 
 
     package views {
-        class ClimaActivity {
-            - climaController: ClimaController
-            + displayWeatherInfo(): void
+        class UserProfileActivity {
+            - binding: ActivityUserProfileBinding
+            - userId: String
+            - controller: UserProfileController
+            - loadUserProfile(): void
+            - cerrarSesion(): void
         }
 
-        class AlertActivity {
-            - alertController: AlertController
-            + configureAlertSettings(): void
+        class StartFormActivity {
+            - binding: ActivityStartFormBinding
+            - controller: StartFormController
         }
 
-        class ConsejosActivity {
-            - consejosController: ConsejosController
-            + showConsejos(): void
+        class SignupActivity {
+            - binding: ActivitySignupBinding
+            - controller: SignupController
+            + onAccountCreationSuccess(): void
+            + onUserSaveSuccess(): void
+        }
+
+        class RegistroCultivoActivity {
+            - binding: ActivityRegistroCultivoBinding
+            - controller: RegistroCultivoController
+            - selectedDate: Date
+            - saveCultivo(): void
+        }
+
+        class NewsActivity {
+            - binding: ActivityNewsBinding
+            - webView: WebView
+            - controlador: NewsController
+            - cultivoSeleccionado: String
+            - cargarNoticias(): void
         }
 
         class ForecastsActivity {
             - forecastController: ForecastController
-            + displayForecasts(): void
+            - binding: ActivityForecastsBinding
+            - crearGraficos(Forecast): void
         }
 
-        class NewsActivity {
-            - newsController: NewsController
-            + filterNewsByCountry(): void
+        class ConsejosActivity {
+            - auth: FirebaseAuth
+            - binding: ActivityConsejosBinding
+            - controller: ConsejosController
+            - cargarFormulario(String): void
+            - cargarFormularioCacao(): void
+            - cargarFormularioCafe(): void
         }
 
-        class RegistroCultivoActivity {
-            - registroCultivoController: RegistroCultivoController
-            + saveCultivoData(): void
+        class ClimaActivity {
+            - auth: FirebaseAuth
+            - climaController: ClimaController
+            - binding: ActivityClimaBinding
+            - map: GoogleMap
+            - actualizarInterfaz(Clima): void
+            + onMapReady(GoogleMap): void
         }
 
-        class SignupActivity {
-            - signupController: SignupController
-            + registerUser(): void
-        }
+        class AlertActivity {
+            - binding: ActivityAlertBinding
+            - auth: FirebaseAuth
+            - alertController: AlertController
+            - fusedLocationClient: FusedLocationProviderClient
+            - calendar: Calendar
+            - getLocationAndFetchData(): void
+            - scheduleCustomNotification(): void
 
-        class StartFormActivity {
-            - startFormController: StartFormController
-            + saveSelectedModels(): void
-        }
-
-        class UserProfileActivity {
-            - userProfileController: UserProfileController
-            + loadUserProfile(): void
-            + saveUserProfile(): void
-            + signOut(): void
-        }
-
-        class MainActivity {
-            + checkLoginStatus(): void
-            + requestPermissions(): void
         }
     }
 

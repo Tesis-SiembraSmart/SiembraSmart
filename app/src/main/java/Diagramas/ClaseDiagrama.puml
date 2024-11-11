@@ -104,60 +104,6 @@ ClimaActivity --> ClimaController : uses
 ClimaActivity --> Clima : displays
 
 package "controllers" {
-    class ClimaController {
-        -client: OkHttpClient
-        -dias: Int
-        +fetchDatosClima(latitud: Double, longitud: Double)
-        -actualizarDatosDesdeJson(json: JSONObject)
-        -jsonArrayToStringList(jsonArray: JSONArray): MutableList<String>
-        -jsonArrayToDoubleList(jsonArray: JSONArray): MutableList<Double>
-        -jsonArrayToIntList(jsonArray: JSONArray): MutableList<Int>
-    }
-}
-
-package "models" {
-    class Clima {
-        +temperatura: Double
-        +humedad: Int
-        +aparenteTemperatura: Double
-        +precipitacion: Double
-        +nubosidad: Int
-        +velocidadViento: Double
-        +temperaturas: MutableList<Double>
-        +humedades: MutableList<Int>
-        +probabilidadesPrecipitacion: MutableList<Int>
-        +precipitaciones: MutableList<Double>
-        +evapotranspiraciones: MutableList<Double>
-        +velocidadesViento: MutableList<Double>
-        +humedadesSuelo: MutableList<Double>
-        +times: MutableList<String>
-    }
-}
-
-package "views" {
-    class ClimaActivity {
-        -auth: FirebaseAuth
-        -clima: Clima
-        -climaController: ClimaController
-        -binding: ActivityClimaBinding
-        -map: GoogleMap
-        -fusedLocationClient: FusedLocationProviderClient
-        +onCreate(savedInstanceState: Bundle)
-        +obtenerDatosClima()
-        +actualizarInterfaz()
-        +actualizarMapa(latitud: Double, longitud: Double)
-        +ajustarWindowInsets()
-        +onMapReady(googleMap: GoogleMap)
-        +enableMyLocation()
-        +onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray)
-    }
-}
-
-ClimaController --> Clima : updates
-ClimaActivity --> ClimaController : uses
-ClimaActivity --> Clima : displays
-
-package "controllers" {
     class ConsejosController {
         -client: OkHttpClient
         -database: DatabaseReference
@@ -220,37 +166,37 @@ package "views" {
 
 }
 
-    ForecastsActivity ..> ForecastController : uses
-    ForecastsActivity ..> Forecast : uses
+ForecastsActivity ..> ForecastController : uses
+ForecastsActivity ..> Forecast : uses
 
-    package "controllers" {
-        class NewsController {
-            - database: DatabaseReference
-            + configurarWebView(webView: WebView): void
-            + configurarSpinner(userId: String, spinner: Spinner, onItemSelected: (String) -> void): void
-            + generarUrlParaNoticias(cultivo: String, soloColombia: Boolean): String
-            + cargarUrlEnWebView(webView: WebView, url: String): void
-        }
+package "controllers" {
+    class NewsController {
+        - database: DatabaseReference
+        + configurarWebView(webView: WebView): void
+        + configurarSpinner(userId: String, spinner: Spinner, onItemSelected: (String) -> void): void
+        + generarUrlParaNoticias(cultivo: String, soloColombia: Boolean): String
+        + cargarUrlEnWebView(webView: WebView, url: String): void
     }
+}
 
-    package "views" {
-        class NewsActivity {
-            - binding: ActivityNewsBinding
-            - webView: WebView
-            - controlador: NewsController
-            - cultivoSeleccionado: String
-            + onCreate(savedInstanceState: Bundle): void
-            - configurarSpinner(userId: String): void
-            - cargarNoticias(): void
-        }
+package "views" {
+    class NewsActivity {
+        - binding: ActivityNewsBinding
+        - webView: WebView
+        - controlador: NewsController
+        - cultivoSeleccionado: String
+        + onCreate(savedInstanceState: Bundle): void
+        - configurarSpinner(userId: String): void
+        - cargarNoticias(): void
     }
+}
 
-    NewsActivity --> NewsController : uses
-    NewsActivity --> ActivityNewsBinding : contains
-    NewsActivity --> WebView : contains
-    NewsController --> DatabaseReference : uses
-    NewsController --> WebView : uses
-    NewsController --> Spinner : uses
+NewsActivity --> NewsController : uses
+NewsActivity --> ActivityNewsBinding : contains
+NewsActivity --> WebView : contains
+NewsController --> DatabaseReference : uses
+NewsController --> WebView : uses
+NewsController --> Spinner : uses
 
 package "utils" {
     class CustomMarkerView {
@@ -414,6 +360,22 @@ package "views" {
 UserProfileActivity --> UserProfileController : uses
 UserProfileController --> DatabaseReference : uses
 UserProfileController --> FirebaseAuth : uses
+
+' Relationships for utilities in all activities
+AlertActivity --> Navigation : "uses"
+ClimaActivity --> Navigation : "uses"
+ConsejosActivity --> Navigation : "uses"
+ForecastsActivity --> Navigation : "uses"
+NewsActivity --> Navigation : "uses"
+RegistroCultivoActivity --> Navigation : "uses"
+SignupActivity --> Navigation : "uses"
+StartFormActivity --> Navigation : "uses"
+UserProfileActivity --> Navigation : "uses"
+
+AlertActivity --> Notification : "uses"
+ForecastsActivity --> DialogHelper : "uses"
+ForecastController --> CustomMarkerView : "uses"
+
 
 package "views" {
     class MainActivity {
