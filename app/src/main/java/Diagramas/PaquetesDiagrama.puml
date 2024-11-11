@@ -19,9 +19,9 @@ package "com.example.siembrasmart" {
         }
 
         class AlertController {
-            + fetchAlerts(): List<Alertas>
-            + setAlertThresholds(floodLevel: Double, droughtLevel: Double): void
-            + sendAlertNotifications(): void
+            + fetchCaudalAlerts(): List<Alertas>
+            + setCaudalThresholds(caudalAltoLevel: Double, caudalBajoLevel: Double): void
+            + sendCaudalAlertNotifications(): void
         }
 
         class ClimaController {
@@ -52,31 +52,44 @@ package "com.example.siembrasmart" {
 
     package models {
         class Alertas {
-            + floodThreshold: Double
-            + droughtThreshold: Double
-            + type: String
-            + message: String
+            + thresholdCaudalAlto: Double
+            + thresholdCaudalBajo: Double
+            + alertaCaudalMuyBajo: String
+            + alertaCaudalBajo: String
         }
 
         class Clima {
-            + temperature: Double
-            + humidity: Double
-            + windSpeed: Double
-            + location: Location
+            + temperatura: Double
+            + humedad: Int
+            + aparenteTemperatura: Double
+            + precipitacion: Double
+            + nubosidad: Int
+            + velocidadViento: Double
+            + temperaturas: MutableList<Double>
+            + humedades: MutableList<Int>
+            + probabilidadesPrecipitacion: MutableList<Int>
+            + precipitaciones: MutableList<Double>
+            + evapotranspiraciones: MutableList<Double>
+            + velocidadesViento: MutableList<Double>
+            + humedadesSuelo: MutableList<Double>
+            + times: MutableList<String>
         }
 
         class Forecast {
-            + date: Date
-            + weatherCondition: String
-            + highTemp: Double
-            + lowTemp: Double
+            + temperaturas: List<Double>
+            + humedades: List<Int>
+            + probabilidadesPrecipitacion: List<Int>
+            + precipitaciones: List<Double>
+            + evapotranspiraciones: List<Double>
+            + velocidadesViento: List<Double>
+            + humedadesSuelo: List<Double>
+            + tiempos: List<String>
         }
 
         class Cultivo {
             + nombre: String
             + tipo: String
             + fechaInicio: Date
-            + fechaFin: Date
             + latitud: Double
             + longitud: Double
             + area: Double
@@ -88,7 +101,8 @@ package "com.example.siembrasmart" {
             + lastName: String
             + email: String
             + phoneNumber: String
-            + modelsUsed: List<String>
+            + modelosUsados: List<String>
+            + cultivos: List<Cultivo>
         }
     }
 
@@ -104,7 +118,12 @@ package "com.example.siembrasmart" {
         class Notification {
             + sendNotification(title: String, message: String): void
         }
+
+        class DialogHelper {
+            + mostrarDialogoAyuda(context: Context, titulo: String, mensaje: String): void
+        }
     }
+
 
     package views {
         class ClimaActivity {
@@ -164,6 +183,8 @@ package "com.example.siembrasmart" {
     AlertActivity --> AlertController : uses
     ConsejosActivity --> ConsejosController : uses
     ForecastsActivity --> ForecastController : uses
+    ForecastsActivity --> DialogHelper : uses
+
     NewsActivity --> NewsController : uses
     RegistroCultivoActivity --> RegistroCultivoController : uses
     SignupActivity --> SignupController : uses

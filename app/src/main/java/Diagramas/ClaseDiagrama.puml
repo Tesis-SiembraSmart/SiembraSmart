@@ -10,10 +10,10 @@ package "controllers" {
 
 package "models" {
     class Alertas {
-        +alertaInundacionRoja: String
-        +alertaInundacionAmarilla: String
-        +alertaSequíaRoja: String
-        +alertaSequíaAmarilla: String
+        +alertaCaudalAlto: String
+        +alertaCaudalModerado: String
+        +alertaCaudalMuyBajo: String
+        +alertaCaudalBajo: String
     }
 }
 
@@ -24,20 +24,20 @@ package "views" {
         -alertController: AlertController
         -fusedLocationClient: FusedLocationProviderClient
         -times: MutableList<String>
-        -descargaRioMax: MutableList<Double>
-        -descargaRioMedia: MutableList<Double>
-        -descargaRioMin: MutableList<Double>
+        -caudalRioMax: MutableList<Double>
+        -caudalRioMedia: MutableList<Double>
+        -caudalRioMin: MutableList<Double>
         -totalAlertas: Int
         -calendar: Calendar
         +onCreate(savedInstanceState: Bundle)
         +getLocationAndFetchData()
         +fetchWeatherData(latitud: Double, longitud: Double)
-        +filterDataFromToday(allTimes: MutableList<String>, allDescargaRioMax: MutableList<Double>, allDescargaRioMedia: MutableList<Double>, allDescargaRioMin: MutableList<Double>)
-        +generateFloodAndDroughtAlerts(dischargeMax: MutableList<Double>, dischargeMean: MutableList<Double>, dischargeMin: MutableList<Double>, maxThresholdRed: Double, meanThresholdYellow: Double, droughtThresholdRed: Double, droughtThresholdYellow: Double): Alertas
-        +calculateThresholdRed(descargaRioMax: MutableList<Double>): Double
-        +calculateThresholdYellow(descargaRioMedia: MutableList<Double>): Double
-        +calculateDroughtThresholdRed(descargaRioMin: MutableList<Double>): Double
-        +calculateDroughtThresholdYellow(descargaRioMin: MutableList<Double>): Double
+        +filterDataFromToday(allTimes: MutableList<String>, allCaudalRioMax: MutableList<Double>, allCaudalRioMedia: MutableList<Double>, allCaudalRioMin: MutableList<Double>)
+        +generateCaudalAlerts(caudalMax: MutableList<Double>, caudalMean: MutableList<Double>, caudalMin: MutableList<Double>, thresholdCaudalAlto: Double, thresholdCaudalModerado: Double, thresholdCaudalMuyBajo: Double, thresholdCaudalBajo: Double): Alertas
+        +calculateThresholdRed(caudalRioMax: MutableList<Double>): Double
+        +calculateThresholdYellow(caudalRioMedia: MutableList<Double>): Double
+        +calculateThresholdCaudalMuyBajo(caudalRioMin: MutableList<Double>): Double
+        +calculateThresholdCaudalBajo(caudalRioMin: MutableList<Double>): Double
         +showAlert(time: Long, title: String, message: String)
         +createNotificationChannel()
         +scheduleCustomNotification()
@@ -274,6 +274,10 @@ package "utils" {
         - showBottomDialog(): void
     }
 
+    class DialogHelper {
+        + mostrarDialogoAyuda(context: Context, titulo: String, mensaje: String): void
+    }
+
     class Notification {
         + onReceive(context: Context, intent: Intent): void
     }
@@ -286,6 +290,8 @@ Navigation --> Toolbar : uses
 Navigation --> Intent : uses
 Notification --> NotificationManager : uses
 Notification --> NotificationCompat : uses
+DialogHelper --> Context : uses
+DialogHelper --> AlertDialog : uses
 
 package "controllers" {
     class RegistroCultivoController {

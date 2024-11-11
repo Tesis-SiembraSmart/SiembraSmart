@@ -39,6 +39,8 @@ package "Componentes Principales de SiembraSmart" {
         [CustomMarkerView]
         [Navigation]
         [Notification]
+        [DialogHelper]
+
     }
 
     component "Render" {
@@ -53,15 +55,15 @@ package "Componentes Principales de SiembraSmart" {
     }
 
     component "Firebase Realtime Database" as FirebaseDatabase {
-        [FirebaseDatabase] -down-> [UserProfileController] : Stores User Data
-        [FirebaseDatabase] -down-> [RegistroCultivoController] : Manages Crop Data
-        [FirebaseDatabase] -down-> [NewsController] : Retrieves News Preferences
+        [FirebaseDatabase] -up-> [UserProfileController] : Stores User Data
+        [FirebaseDatabase] -up-> [RegistroCultivoController] : Manages Crop Data
+        [FirebaseDatabase] -up-> [NewsController] : Retrieves News Preferences
     }
 
-    component "Open Meteo API" {
-        [Open Meteo API] -down-> [ForecastController] : Fetches Weather Forecasts
-        [Open Meteo API] -down-> [ClimaController] : Retrieves Climate Data
-        [Open Meteo API] -down-> [AlertController] : Provides Flood/Drought Alerts
+    component "Open Meteo API" as OpenMeteoAPI{
+        [OpenMeteoAPI] -down-> [ForecastController] : Fetches Weather Forecasts
+        [OpenMeteoAPI] -down-> [ClimaController] : Retrieves Climate Data
+        [OpenMeteoAPI] -down-> [AlertController] : Provides River Discharge Alerts
     }
 
     component "Google Maps API" as GoogleMaps {
@@ -87,11 +89,10 @@ package "Componentes Principales de SiembraSmart" {
     [ClimaController] -down-> [Clima] : updates climate model
     [ForecastController] -down-> [Forecast] : loads forecast data
     [RegistroCultivoController] -down-> [Cultivo] : stores crop data
-
+    [DialogHelper] -down-> [ForecastsActivity] : displays help dialogs for weather graphs
     [CustomMarkerView] -down-> [Clima] : shows climate info
     [Notification] -down-> [Alertas] : sends alerts
     [Navigation] -down-> [MainActivity] : navigates between activities
-
     FirebaseAuth -[hidden]-> OpenMeteoAPI
     FirebaseAuth -[hidden]-> FirebaseDatabase
 }

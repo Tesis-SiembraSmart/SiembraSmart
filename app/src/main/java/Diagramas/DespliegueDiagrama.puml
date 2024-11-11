@@ -59,7 +59,7 @@ CnC --> DB : "Obtener modelos usados"
 
 App --> WeatherAPI : "Solicitud de datos climáticos"
 CC --> WeatherAPI : "Obtener pronósticos de clima"
-App --> AlertsAPI : "Solicitar alertas de inundación/sequía"
+App --> AlertsAPI : "Solicitar alertas del caudal"
 AC --> AlertsAPI : "Obtener alertas de eventos climáticos"
 
 App --> ModelsAPI : "Solicitar predicciones de rendimiento"

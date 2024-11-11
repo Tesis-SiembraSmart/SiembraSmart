@@ -19,7 +19,6 @@ import com.example.siembrasmart.views.ClimaActivity
 import com.example.siembrasmart.views.ConsejosActivity
 import com.example.siembrasmart.views.NewsActivity
 import com.example.siembrasmart.views.UserProfileActivity
-import com.example.siembrasmart.views.RegistroCultivoActivity
 import com.example.siembrasmart.views.StartFormActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
