@@ -30,21 +30,48 @@
             android:orientation="vertical"
             android:gravity="center_horizontal">
 
+            <!-- Año -->
+            <EditText
+                android:id="@+id/etYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Año"
+                android:inputType="number"
+                android:layout_marginTop="8dp" />
+
             <!-- Área de Café -->
             <EditText
-                android:id="@+id/etCoffeeAcreage"
+                android:id="@+id/etCoffeeHectare"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Área de Café (ha)"
                 android:inputType="numberDecimal"
                 android:layout_marginTop="8dp" />
 
+            <!-- Área Mejorada de Café -->
+            <EditText
+                android:id="@+id/etCoffeeImprovedHectare"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Área Mejorada de Café (ha)"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
+            <!-- Costo de Mejora de Café -->
+            <EditText
+                android:id="@+id/etCoffeeImprovedCost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Costo Mejorado de Café"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
             <!-- Switch para Fertilizantes -->
             <Switch
-                android:thumbTint="@color/verde_icon"
                 android:id="@+id/switchFertilizer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:thumbTint="@color/verde_icon"
                 android:text="¿Utilizó fertilizantes?"
                 android:layout_marginTop="16dp" />
 
@@ -57,7 +84,7 @@
                 android:visibility="gone">
 
                 <EditText
-                    android:id="@+id/etCoffeeAcreageFertilizer"
+                    android:id="@+id/etCoffeeHectareFertilizer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Área Fertilizada de Café (ha)"
@@ -75,10 +102,10 @@
 
             <!-- Switch para Químicos -->
             <Switch
-                android:thumbTint="@color/verde_icon"
                 android:id="@+id/switchChemicals"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:thumbTint="@color/verde_icon"
                 android:text="¿Utilizó químicos?"
                 android:layout_marginTop="16dp" />
 
@@ -91,7 +118,7 @@
                 android:visibility="gone">
 
                 <EditText
-                    android:id="@+id/etCoffeeChemicalAcreage"
+                    android:id="@+id/etCoffeeChemicalHectare"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Área de Químicos para Café (ha)"
@@ -109,10 +136,10 @@
 
             <!-- Switch para Maquinaria -->
             <Switch
-                android:thumbTint="@color/verde_icon"
                 android:id="@+id/switchMachinery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:thumbTint="@color/verde_icon"
                 android:text="¿Utilizó maquinaria?"
                 android:layout_marginTop="16dp" />
 
@@ -125,7 +152,7 @@
                 android:visibility="gone">
 
                 <EditText
-                    android:id="@+id/etCoffeeMachineryAcreage"
+                    android:id="@+id/etCoffeeMachineryHectare"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Área de Maquinaria para Café (ha)"
@@ -141,23 +168,7 @@
                     android:layout_marginTop="8dp" />
             </LinearLayout>
 
-            <!-- Otros campos -->
-            <EditText
-                android:id="@+id/etCoffeeImprovedAcreage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Área Mejorada de Café (ha)"
-                android:inputType="numberDecimal"
-                android:layout_marginTop="8dp" />
-
-            <EditText
-                android:id="@+id/etCoffeeImprovedCost"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Costo Mejorado de Café"
-                android:inputType="numberDecimal"
-                android:layout_marginTop="8dp" />
-
+            <!-- Café Cosechado -->
             <EditText
                 android:id="@+id/etCoffeeHarvested"
                 android:layout_width="match_parent"
@@ -166,6 +177,7 @@
                 android:inputType="numberDecimal"
                 android:layout_marginTop="8dp" />
 
+            <!-- Precio de Venta de Café -->
             <EditText
                 android:id="@+id/etCoffeeSoldPrice"
                 android:layout_width="match_parent"
@@ -174,6 +186,7 @@
                 android:inputType="numberDecimal"
                 android:layout_marginTop="8dp" />
 
+            <!-- Pérdida en la Cosecha de Café -->
             <EditText
                 android:id="@+id/etCoffeeHarvestLoss"
                 android:layout_width="match_parent"
@@ -197,14 +210,41 @@
 
     <!-- Resultado de la predicción -->
     <TextView
-        android:id="@+id/tvResultCoffee"
+        android:id="@+id/tvResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Esperando predicción..."
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
+        android:text="Rendimiento Predicho: -"
         android:textSize="18sp"
-        android:layout_marginBottom="16dp"
-        android:gravity="center" />
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"
+        android:textColor="@android:color/black" />
+    <!-- Clasificación -->
+    <TextView
+        android:id="@+id/tvClassification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clasificación: -"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="8dp" />
 
+    <!-- Consejos -->
+    <TextView
+        android:id="@+id/tvAdviceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Consejos:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/tvAdvice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="4dp"
+        android:text="Aquí aparecerán los consejos después de la predicción."
+        android:textColor="@color/black"
+        android:textSize="14sp" />
 </LinearLayout>

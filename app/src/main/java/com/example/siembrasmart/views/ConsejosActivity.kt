@@ -79,7 +79,6 @@ class ConsejosActivity : Navigation() {
             parameters.put("Area_Cosechada", areaCosechadaInput.text.toString().toDoubleOrNull() ?: 0.0)
             parameters.put("Produccion", produccionInput.text.toString().toDoubleOrNull() ?: 0.0)
             requestData.put("parameters", parameters)
-
             // Enviar la solicitud usando el controlador
             controller.makePredictionRequest(requestData) { response ->
                 runOnUiThread {
@@ -117,97 +116,143 @@ class ConsejosActivity : Navigation() {
                     }
                 }
             }
+
         }
     }
+
+
 
     private fun cargarFormularioCafe() {
         val formularioCafeView = layoutInflater.inflate(R.layout.formulario_cafe, binding.formularioContainer, false)
         binding.formularioContainer.addView(formularioCafeView)
 
-        // Campos de entrada para café
-        val coffeeAcreageInput: EditText = formularioCafeView.findViewById(R.id.etCoffeeAcreage)
-        val coffeeImprovedAcreageInput: EditText = formularioCafeView.findViewById(R.id.etCoffeeImprovedAcreage)
+        // Input fields for coffee parameters
+        val yearInput: EditText = formularioCafeView.findViewById(R.id.etYear)
+        val coffeeAcreageInput: EditText = formularioCafeView.findViewById(R.id.etCoffeeHectare)
+        val coffeeImprovedAcreageInput: EditText = formularioCafeView.findViewById(R.id.etCoffeeImprovedHectare)
         val coffeeImprovedCostInput: EditText = formularioCafeView.findViewById(R.id.etCoffeeImprovedCost)
         val coffeeHarvestedInput: EditText = formularioCafeView.findViewById(R.id.etCoffeeHarvested)
         val coffeeSoldPriceInput: EditText = formularioCafeView.findViewById(R.id.etCoffeeSoldPrice)
         val coffeeHarvestLossInput: EditText = formularioCafeView.findViewById(R.id.etCoffeeHarvestLoss)
+        val resultadoTextView: TextView = formularioCafeView.findViewById(R.id.tvResult)
+        val predictButton: Button = formularioCafeView.findViewById(R.id.btnPredictCoffee)
+        val clasificacionTextView: TextView = formularioCafeView.findViewById(R.id.tvClassification)
+        val consejosTextView: TextView = formularioCafeView.findViewById(R.id.tvAdvice)
 
+        // Fertilizer section
         val switchFertilizer: Switch = formularioCafeView.findViewById(R.id.switchFertilizer)
         val layoutFertilizer: LinearLayout = formularioCafeView.findViewById(R.id.layoutFertilizer)
-        val coffeeAcreageFertilizerInput: EditText = formularioCafeView.findViewById(R.id.etCoffeeAcreageFertilizer)
+        val coffeeAcreageFertilizerInput: EditText = formularioCafeView.findViewById(R.id.etCoffeeHectareFertilizer)
         val coffeeFertilizerCostInput: EditText = formularioCafeView.findViewById(R.id.etCoffeeFertilizerCost)
 
+        // Chemical section
         val switchChemicals: Switch = formularioCafeView.findViewById(R.id.switchChemicals)
         val layoutChemicals: LinearLayout = formularioCafeView.findViewById(R.id.layoutChemicals)
-        val coffeeChemicalAcreageInput: EditText = formularioCafeView.findViewById(R.id.etCoffeeChemicalAcreage)
+        val coffeeChemicalAcreageInput: EditText = formularioCafeView.findViewById(R.id.etCoffeeChemicalHectare)
         val coffeeChemicalCostInput: EditText = formularioCafeView.findViewById(R.id.etCoffeeChemicalCost)
 
+        // Machinery section
         val switchMachinery: Switch = formularioCafeView.findViewById(R.id.switchMachinery)
         val layoutMachinery: LinearLayout = formularioCafeView.findViewById(R.id.layoutMachinery)
-        val coffeeMachineryAcreageInput: EditText = formularioCafeView.findViewById(R.id.etCoffeeMachineryAcreage)
+        val coffeeMachineryAcreageInput: EditText = formularioCafeView.findViewById(R.id.etCoffeeMachineryHectare)
         val coffeeMachineryCostInput: EditText = formularioCafeView.findViewById(R.id.etCoffeeMachineryCost)
 
-        val resultadoTextView: TextView = formularioCafeView.findViewById(R.id.tvResultCoffee)
-        val predictButton: Button = formularioCafeView.findViewById(R.id.btnPredictCoffee)
 
-        // Añadir listeners a los switches para controlar la visibilidad de los campos
+
+        // Listeners for switches to show/hide layouts
         switchFertilizer.setOnCheckedChangeListener { _, isChecked ->
             layoutFertilizer.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
-
         switchChemicals.setOnCheckedChangeListener { _, isChecked ->
             layoutChemicals.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
-
         switchMachinery.setOnCheckedChangeListener { _, isChecked ->
             layoutMachinery.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
 
-        // Botón de predicción
+        // Prediction button action
         predictButton.setOnClickListener {
-            val data = JSONObject()
-            data.put("coffee_acreage", coffeeAcreageInput.text.toString().toDoubleOrNull() ?: 0.0)
-            data.put("coffee_improved_acreage", coffeeImprovedAcreageInput.text.toString().toDoubleOrNull() ?: 0.0)
-            data.put("coffee_improved_cost", coffeeImprovedCostInput.text.toString().toDoubleOrNull() ?: 0.0)
-            data.put("coffee_harvested", coffeeHarvestedInput.text.toString().toDoubleOrNull() ?: 0.0)
-            data.put("coffee_sold_price", coffeeSoldPriceInput.text.toString().toDoubleOrNull() ?: 0.0)
-            data.put("coffee_harvest_loss", coffeeHarvestLossInput.text.toString().toDoubleOrNull() ?: 0.0)
+            val requestData = JSONObject()
+            requestData.put("crop_type", "cafe")
+            val parameters = JSONObject()
 
-            // Añadir parámetros de fertilizantes si el switch está activado
-            if (switchFertilizer.isChecked) {
-                data.put("coffee_acreage_fertilizer", coffeeAcreageFertilizerInput.text.toString().toDoubleOrNull() ?: 0.0)
-                data.put("coffee_fertilizer_cost", coffeeFertilizerCostInput.text.toString().toDoubleOrNull() ?: 0.0)
-            } else {
-                data.put("coffee_acreage_fertilizer", 0.0)
-                data.put("coffee_fertilizer_cost", 0.0)
-            }
+            // Main input values
+            parameters.put("Year", yearInput.text.toString().toIntOrNull() ?: 2022)
+            parameters.put("coffee_hectare", coffeeAcreageInput.text.toString().toDoubleOrNull() ?: 0.0)
+            parameters.put("coffee_improved_hectare", coffeeImprovedAcreageInput.text.toString().toDoubleOrNull() ?: 0.0)
+            parameters.put("coffee_improved_cost", coffeeImprovedCostInput.text.toString().toDoubleOrNull() ?: 0.0)
+            parameters.put("coffee_harvested", coffeeHarvestedInput.text.toString().toDoubleOrNull() ?: 0.0)
+            parameters.put("coffee_sold_price", coffeeSoldPriceInput.text.toString().toDoubleOrNull() ?: 0.0)
+            parameters.put("coffee_harvest_loss", coffeeHarvestLossInput.text.toString().toDoubleOrNull() ?: 0.0)
 
-            // Añadir parámetros de químicos si el switch está activado
-            if (switchChemicals.isChecked) {
-                data.put("coffee_chemical_acreage", coffeeChemicalAcreageInput.text.toString().toDoubleOrNull() ?: 0.0)
-                data.put("coffee_chemical_cost", coffeeChemicalCostInput.text.toString().toDoubleOrNull() ?: 0.0)
-            } else {
-                data.put("coffee_chemical_acreage", 0.0)
-                data.put("coffee_chemical_cost", 0.0)
-            }
+            // Add fertilizer parameters, set to 0.0 if hidden
+            parameters.put("coffee_hectare_fertilizer", if (layoutFertilizer.visibility == View.VISIBLE) {
+                coffeeAcreageFertilizerInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
+            parameters.put("coffee_fertilizer_cost", if (layoutFertilizer.visibility == View.VISIBLE) {
+                coffeeFertilizerCostInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
 
-            // Añadir parámetros de maquinaria si el switch está activado
-            if (switchMachinery.isChecked) {
-                data.put("coffee_machinery_acreage", coffeeMachineryAcreageInput.text.toString().toDoubleOrNull() ?: 0.0)
-                data.put("coffee_machinery_cost", coffeeMachineryCostInput.text.toString().toDoubleOrNull() ?: 0.0)
-            } else {
-                data.put("coffee_machinery_acreage", 0.0)
-                data.put("coffee_machinery_cost", 0.0)
-            }
+            // Add chemical parameters, set to 0.0 if hidden
+            parameters.put("coffee_chemical_hectare", if (layoutChemicals.visibility == View.VISIBLE) {
+                coffeeChemicalAcreageInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
+            parameters.put("coffee_chemical_cost", if (layoutChemicals.visibility == View.VISIBLE) {
+                coffeeChemicalCostInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
 
-            // Realizar la solicitud de predicción
-            controller.makePredictionRequest(data) { result ->
+            // Add machinery parameters, set to 0.0 if hidden
+            parameters.put("coffee_machinery_hectare", if (layoutMachinery.visibility == View.VISIBLE) {
+                coffeeMachineryAcreageInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
+            parameters.put("coffee_machinery_cost", if (layoutMachinery.visibility == View.VISIBLE) {
+                coffeeMachineryCostInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
+
+            requestData.put("parameters", parameters)
+
+            // Send request using controller
+            // Enviar la solicitud usando el controlador
+            controller.makePredictionRequest(requestData) { response ->
                 runOnUiThread {
-                    val formattedResult2 = result.substringBefore(".") + "." + result.substringAfter(".").take(2)
-                    resultadoTextView.text = "$formattedResult2 kg"
+                    Log.d("ConsejosActivity", "Response: $response")  // Verificar la respuesta recibida
+
+                    try {
+                        // Convertir el response a JSONObject directamente
+                        val jsonResponse = JSONObject(response)
+
+                        // Extraer los valores de la respuesta JSON
+                        val rendimientoPredicho = jsonResponse.getDouble("Rendimiento_Predicho")
+                        val clasificacion = jsonResponse.getString("Clasificacion")
+                        val consejosArray = jsonResponse.getJSONArray("Consejos")
+
+                        // Mostrar el rendimiento predicho
+                        val formattedResult = String.format("%.2f  kg/ha", rendimientoPredicho)
+                        resultadoTextView.text = "Rendimiento Predicho: $formattedResult"
+
+                        // Mostrar la clasificación
+                        clasificacionTextView.text = "Clasificación: $clasificacion"
+
+                        // Mostrar los consejos en formato de lista
+                        val consejosText = StringBuilder("")
+                        for (i in 0 until consejosArray.length()) {
+                            consejosText.append("- ${consejosArray.getString(i)}\n")
+                        }
+                        consejosTextView.text = consejosText.toString()
+
+                    } catch (e: Exception) {
+
+                        Log.e("ConsejosActivity", "Error al procesar la respuesta JSON", e)
+                        resultadoTextView.text = "Error al obtener la predicción"
+                        clasificacionTextView.text = ""
+                        consejosTextView.text = ""
+                    }
                 }
             }
         }
     }
+
+
+
 
 }
