@@ -19,42 +19,22 @@ class ConsejosController {
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
     fun makePredictionRequest(data: JSONObject, callback: (String) -> Unit) {
-        // Replace the IP with your Render service URL
-        val url = "https://api-modelos.onrender.com/predict" // Replace with your actual URL
-        Log.d("ConsejosController", "URL de la API: $url")
-
-        // Create the request body with JSON
+        val url = "https://api-modelos.onrender.com/predict"
         val body = RequestBody.create("application/json; charset=utf-8".toMediaType(), data.toString())
+        val request = Request.Builder().url(url).post(body).build()
 
-        // Create the POST request
-        val request = Request.Builder()
-            .url(url)
-            .post(body)
-            .build()
-        Log.d("ConsejosController", "Solicitud POST creada")
-
-        // Execute the request
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 Log.e("ConsejosController", "Error al realizar la solicitud: ${e.message}")
-                callback("Error en la solicitud: ${e.message}")
+                callback("{\"error\": \"${e.message}\"}")
             }
 
             override fun onResponse(call: Call, response: Response) {
-                Log.d("ConsejosController", "Solicitud completada con éxito")
                 val responseBody = response.body?.string()
                 if (responseBody != null) {
-                    Log.d("ConsejosController", "Respuesta del servidor: $responseBody")
-                    val jsonResponse = JSONObject(responseBody)
-                    val rendimientoPredicho = jsonResponse.optDouble("Rendimiento_Predicho", Double.NaN)
-
-                    if (!rendimientoPredicho.isNaN()) {
-                        callback("Rendimiento Predicho: $rendimientoPredicho")
-                    } else {
-                        callback("Error en el análisis de la respuesta")
-                    }
+                    callback(responseBody) // Envía la respuesta completa
                 } else {
-                    callback("Respuesta sin cuerpo")
+                    callback("{\"error\": \"Respuesta sin cuerpo\"}")
                 }
             }
         })

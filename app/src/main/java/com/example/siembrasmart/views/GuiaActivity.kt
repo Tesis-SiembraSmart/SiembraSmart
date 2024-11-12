@@ -1,16 +1,20 @@
 package com.example.siembrasmart.views
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.siembrasmart.R
+import com.example.siembrasmart.databinding.ActivityGuiaBinding
 
 class GuiaActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityGuiaBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_guia)
-
+        binding = ActivityGuiaBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.btnRegresar.setOnClickListener {
+            startActivity(Intent(this, ClimaActivity::class.java))
+            finish()
+        }
     }
 }

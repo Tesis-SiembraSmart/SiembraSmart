@@ -67,5 +67,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation("com.google.firebase:firebase-analytics")
     implementation(kotlin("script-runtime"))
+    implementation ("com.github.chrisbanes:PhotoView:2.3.0")
+
 
 }

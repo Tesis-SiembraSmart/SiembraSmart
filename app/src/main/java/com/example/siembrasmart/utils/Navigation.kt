@@ -17,6 +17,7 @@ import com.example.siembrasmart.R
 import com.example.siembrasmart.views.AlertActivity
 import com.example.siembrasmart.views.ClimaActivity
 import com.example.siembrasmart.views.ConsejosActivity
+import com.example.siembrasmart.views.GuiaActivity
 import com.example.siembrasmart.views.NewsActivity
 import com.example.siembrasmart.views.UserProfileActivity
 import com.example.siembrasmart.views.StartFormActivity
@@ -70,6 +71,11 @@ open class Navigation : AppCompatActivity() {
             when (item.itemId) {
                 R.id.action_user -> {
                     startActivity(Intent(this, UserProfileActivity::class.java))
+                    finish()
+                    true
+                }
+                R.id.mostrarGuia -> {
+                    startActivity(Intent(this, GuiaActivity::class.java))
                     finish()
                     true
                 }

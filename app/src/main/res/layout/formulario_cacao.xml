@@ -1,7 +1,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
     <!-- Título -->
     <TextView
@@ -10,7 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Predicción de Rendimiento de Cacao"
-        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,11 +23,11 @@
         android:id="@+id/etAreaSembrada"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="16dp"
         android:hint="Área Sembrada (ha)"
         android:inputType="number"
+        android:backgroundTint="@color/verde_icon"
+        android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle" />
@@ -35,11 +37,11 @@
         android:id="@+id/etAreaCosechada"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:hint="Área Cosechada (ha)"
         android:inputType="number"
+        android:backgroundTint="@color/verde_icon"
+        android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etAreaSembrada" />
@@ -49,11 +51,11 @@
         android:id="@+id/etProduccion"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:hint="Producción (t)"
         android:inputType="number"
+        android:backgroundTint="@color/verde_icon"
+        android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etAreaCosechada" />
@@ -67,21 +69,66 @@
         android:backgroundTint="@color/verde_icon"
         android:text="Calcular Rendimiento"
         android:textColor="@android:color/white"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="8dp"
+        android:textAllCaps="false"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etProduccion" />
 
-    <!-- Resultado de la predicción -->
-    <TextView
-        android:id="@+id/tvResult"
-        android:layout_width="wrap_content"
+    <!-- Contenedor de resultados -->
+    <LinearLayout
+        android:id="@+id/llResults"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Esperando predicción..."
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_background"
+        android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnPredict" />
+        app:layout_constraintTop_toBottomOf="@id/btnPredict">
+
+        <!-- Resultado de la predicción -->
+        <TextView
+            android:id="@+id/tvResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rendimiento Predicho: -"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:textColor="@android:color/black" />
+
+        <!-- Clasificación -->
+        <TextView
+            android:id="@+id/tvClassification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clasificación: -"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Consejos -->
+        <TextView
+            android:id="@+id/tvAdviceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Consejos:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/tvAdvice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="4dp"
+            android:text="Aquí aparecerán los consejos después de la predicción."
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
