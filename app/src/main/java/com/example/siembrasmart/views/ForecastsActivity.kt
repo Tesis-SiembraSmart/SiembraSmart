@@ -96,10 +96,18 @@ class ForecastsActivity : AppCompatActivity() {
             this
         )
 
+        val mitad = tiempos.size / 2
+        val tiemposAjustados = tiempos.subList(0, mitad)
+        val evapotranspiracionesAjustadas = forecast.evapotranspiraciones.take(mitad)
+
+        println("Tiempos normales: $tiempos")
+        println("Tiempos ajustados: $tiemposAjustados")
+        println("Evapotranspiraciones ajustadas: $evapotranspiracionesAjustadas")
+
         forecastController.crearGrafico(
-            forecast.evapotranspiraciones.mapIndexed { index, et -> Entry(index.toFloat(), et.toFloat()) },
+            evapotranspiracionesAjustadas.mapIndexed { index, et -> Entry(index.toFloat(), et.toFloat()) },
             "Evapotranspiración (mm)",
-            tiempos,
+            tiemposAjustados,
             binding.graficoEvapotranspiracion,
             this
         )
@@ -112,10 +120,13 @@ class ForecastsActivity : AppCompatActivity() {
             this
         )
 
+
+        val humedadesSueloAjustadas = forecast.humedadesSuelo.take(mitad)
+
         forecastController.crearGrafico(
-            forecast.humedadesSuelo.mapIndexed { index, soilMoisture -> Entry(index.toFloat(), soilMoisture.toFloat()) },
+            humedadesSueloAjustadas.mapIndexed { index, soilMoisture -> Entry(index.toFloat(), soilMoisture.toFloat()) },
             "Humedad del Suelo (m³/m³)",
-            tiempos,
+            tiemposAjustados,
             binding.graficoHumedadSuelo,
             this
         )
@@ -131,7 +142,7 @@ class ForecastsActivity : AppCompatActivity() {
             val dialogHelper = DialogHelper()
                 dialogHelper.mostrarDialogoAyuda(
                 this,
-                "Gráfico de Temperatura",
+                "Gráfico de Temperatura 14 dias",
                 "Este gráfico muestra la temperatura diaria en grados Celsius, permitiendo visualizar las variaciones a lo largo del tiempo."
             )
         }
@@ -140,7 +151,7 @@ class ForecastsActivity : AppCompatActivity() {
             val dialogHelper = DialogHelper()
                 dialogHelper.mostrarDialogoAyuda(
                 this,
-                "Gráfico de Humedad",
+                "Gráfico de Humedad 14 dias",
                 "Este gráfico muestra el porcentaje de humedad relativa diaria, útil para entender las condiciones de humedad del aire que pueden afectar el cultivo."
             )
         }
@@ -149,7 +160,7 @@ class ForecastsActivity : AppCompatActivity() {
             val dialogHelper = DialogHelper()
                 dialogHelper.mostrarDialogoAyuda(
                 this,
-                "Gráfico de Probabilidad de Precipitación",
+                "Gráfico de Probabilidad de Precipitación 14 dias",
                 "Este gráfico muestra la probabilidad de precipitación en porcentaje, lo cual es clave para planificar el riego de los cultivos."
             )
         }
@@ -158,7 +169,7 @@ class ForecastsActivity : AppCompatActivity() {
             val dialogHelper = DialogHelper()
                 dialogHelper.mostrarDialogoAyuda(
                 this,
-                "Gráfico de Precipitación",
+                "Gráfico de Precipitación 14 dias",
                 "Este gráfico muestra la cantidad de precipitación en milímetros (mm) por día, útil para el monitoreo del suministro de agua natural."
             )
         }
@@ -167,7 +178,7 @@ class ForecastsActivity : AppCompatActivity() {
             val dialogHelper = DialogHelper()
                 dialogHelper.mostrarDialogoAyuda(
                 this,
-                "Gráfico de Evapotranspiración",
+                "Gráfico de Evapotranspiración 7 dias",
                 "Este gráfico muestra la evapotranspiración en milímetros (mm) por día, indicando cuánta agua pierde el suelo debido a la evaporación y la transpiración de las plantas."
             )
         }
@@ -176,7 +187,7 @@ class ForecastsActivity : AppCompatActivity() {
             val dialogHelper = DialogHelper()
                 dialogHelper.mostrarDialogoAyuda(
                 this,
-                "Gráfico de Velocidad del Viento",
+                "Gráfico de Velocidad del Viento 14 dias",
                 "Este gráfico muestra la velocidad del viento diaria en km/h, lo cual puede afectar la dispersión de semillas y el riesgo de erosión del suelo."
             )
         }
@@ -185,7 +196,7 @@ class ForecastsActivity : AppCompatActivity() {
             val dialogHelper = DialogHelper()
                 dialogHelper.mostrarDialogoAyuda(
                 this,
-                "Gráfico de Humedad del Suelo",
+                "Gráfico de Humedad del Suelo 7 dias",
                 "Este gráfico muestra la humedad del suelo en m³/m³, importante para evaluar la disponibilidad de agua en el suelo para las raíces de los cultivos."
             )
         }

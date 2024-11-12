@@ -201,7 +201,7 @@
                                 android:id="@+id/cardDescription3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Descripción de la opción 3"
+                                android:text="El modelo predice los kilos (kg) usando: áreas, costos de mejoras, insumos y maquinaria, además de datos de cosecha, ventas y pérdidas"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
                         </LinearLayout>
 
@@ -256,7 +256,7 @@
                                 android:id="@+id/cardDescription4"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Descripción de la opción 4"
+                                android:text="El modelo predice los kilos (kg) usando: áreas, costos de mejoras, insumos y maquinaria, además de datos de cosecha, ventas y pérdidas"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
                         </LinearLayout>
 

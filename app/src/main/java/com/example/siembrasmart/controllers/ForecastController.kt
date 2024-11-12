@@ -79,8 +79,11 @@ class ForecastController {
         val markerView = CustomMarkerView(context, R.layout.marker_view, tiempos.map { Pair(it, 0.0) }, label)
         grafico.marker = markerView
     }
-
     fun crearGrafico(entradas: List<Entry>, label: String, tiempos: List<String>, grafico: LineChart, context: Context) {
+        Log.d("ForecastController", "Entradas: $entradas")
+        Log.d("ForecastController", "Label: $label")
+        Log.d("ForecastController", "Tiempos: $tiempos")
+
         val conjuntoDatos = LineDataSet(entradas, label).apply {
             color = android.graphics.Color.BLUE
             lineWidth = 2f
@@ -94,6 +97,7 @@ class ForecastController {
         grafico.xAxis.valueFormatter = FormateadorEjeTiempo(tiempos)
         grafico.invalidate()
     }
+
 
     inner class FormateadorEjeTiempo(private val tiempos: List<String>) : ValueFormatter() {
         override fun getFormattedValue(value: Float): String {

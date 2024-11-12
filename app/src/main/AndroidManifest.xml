@@ -21,7 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Siembrasmart"
         tools:targetApi="31">
-
+        <activity
+            android:name=".views.GuiaActivity"
+            android:exported="false" />
         <activity
             android:name=".views.ConsejosActivity"
             android:exported="false" />
