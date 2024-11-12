@@ -89,8 +89,12 @@ open class Navigation : AppCompatActivity() {
                 Toast.makeText(this, "Usuario", Toast.LENGTH_SHORT).show()
                 true
             }
-            else -> super.onOptionsItemSelected(item)
-        }
+            R.id.mostrarGuia -> {
+
+                Toast.makeText(this, "Contenido Mostrado", Toast.LENGTH_SHORT).show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)        }
     }
 
     private fun showBottomDialog() {

@@ -1,22 +1,15 @@
 package com.example.siembrasmart.views
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.core.app.ActivityCompat
 import com.example.siembrasmart.R
 import com.example.siembrasmart.controllers.ClimaController
 import com.example.siembrasmart.databinding.ActivityClimaBinding
 import com.example.siembrasmart.models.Clima
 import com.example.siembrasmart.utils.Navigation
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase

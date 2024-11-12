@@ -34,10 +34,10 @@ package "views" {
         +fetchWeatherData(latitud: Double, longitud: Double)
         +filterDataFromToday(allTimes: MutableList<String>, allCaudalRioMax: MutableList<Double>, allCaudalRioMedia: MutableList<Double>, allCaudalRioMin: MutableList<Double>)
         +generateCaudalAlerts(caudalMax: MutableList<Double>, caudalMean: MutableList<Double>, caudalMin: MutableList<Double>, thresholdCaudalAlto: Double, thresholdCaudalModerado: Double, thresholdCaudalMuyBajo: Double, thresholdCaudalBajo: Double): Alertas
-        +calculateThresholdRed(caudalRioMax: MutableList<Double>): Double
-        +calculateThresholdYellow(caudalRioMedia: MutableList<Double>): Double
-        +calculateThresholdCaudalMuyBajo(caudalRioMin: MutableList<Double>): Double
-        +calculateThresholdCaudalBajo(caudalRioMin: MutableList<Double>): Double
+        +calcularUmbralCaudalAlto(caudalRioMax: MutableList<Double>): Double
+        +calcularUmbralCaudalModerado(caudalRioMedia: MutableList<Double>): Double
+        +calcularUmbralCaudalMuyBajo(caudalRioMin: MutableList<Double>): Double
+        +calcularUmbralCaudalBajo(caudalRioMin: MutableList<Double>): Double
         +showAlert(time: Long, title: String, message: String)
         +createNotificationChannel()
         +scheduleCustomNotification()
