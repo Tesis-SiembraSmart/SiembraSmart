@@ -1,0 +1,48 @@
+@startuml
+start
+
+:MainActivity;
+if (Usuario registrado?) then (Sí)
+  :Acceder a ClimaActivity;
+else (No)
+  :Ir a SignupActivity;
+  :Completar registro;
+  :Ir a StartFormActivity;
+  :Seleccionar opciones iniciales;
+  if (Registrar detalles de cultivo?) then (Sí)
+    :Ir a RegistroCultivoActivity;
+    :Guardar información;
+  endif
+  :Regresar a MainActivity;
+endif
+
+:Acceder a ClimaActivity;
+:Mostrar datos climáticos;
+
+if (Seleccionar opción en barra de navegación) then
+  -down->"AlertActivity"
+  :Configurar alertas;
+  :Establecer frecuencia y umbrales de alerta;
+  -up->"ForecastsActivity"
+  :Consultar predicciones climáticas;
+  -up->"NewsActivity"
+  :Filtrar y ver noticias;
+  -up->"ConsejosActivity"
+  :Mostrar recomendaciones personalizadas;
+else
+  :Permanecer en ClimaActivity;
+endif
+
+if (Acceder a UserProfileActivity?) then (Sí)
+  :Ir a UserProfileActivity;
+  :Gestionar perfil y preferencias;
+  if (Cerrar sesión?) then (Sí)
+    :Cerrar sesión;
+    :Volver a estado inicial;
+    stop
+  endif
+endif
+
+:Regresar a ClimaActivity;
+stop
+@enduml
