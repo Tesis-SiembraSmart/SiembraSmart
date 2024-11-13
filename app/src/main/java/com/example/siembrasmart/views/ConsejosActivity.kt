@@ -56,6 +56,7 @@ class ConsejosActivity : Navigation() {
             "cacao" -> cargarFormularioCacao()
             "cafe" -> cargarFormularioCafe()
             "maíz" -> cargarFormularioMaiz()
+            "frijol" -> cargarFormularioFrijol()
 
             else -> Log.d("ConsejosActivity", "No hay formulario disponible para el modelo: $modelo")
         }
@@ -380,5 +381,129 @@ class ConsejosActivity : Navigation() {
         }
     }
 
+    private fun cargarFormularioFrijol() {
+        val formularioFrijolView = layoutInflater.inflate(R.layout.formulario_frijol, binding.formularioContainer, false)
+        binding.formularioContainer.addView(formularioFrijolView)
+
+        // Input fields for beans parameters
+        val yearInput: EditText = formularioFrijolView.findViewById(R.id.etYear)
+        val beansAcreageInput: EditText = formularioFrijolView.findViewById(R.id.etBeansHectare)
+        val beansImprovedAcreageInput: EditText = formularioFrijolView.findViewById(R.id.etBeansImprovedHectare)
+        val beansImprovedCostInput: EditText = formularioFrijolView.findViewById(R.id.etBeansImprovedCost)
+        val beansHarvestedInput: EditText = formularioFrijolView.findViewById(R.id.etBeansHarvested)
+        val beansSoldPriceInput: EditText = formularioFrijolView.findViewById(R.id.etBeansSoldPrice)
+        val beansHarvestLossInput: EditText = formularioFrijolView.findViewById(R.id.etBeansHarvestLoss)
+        val resultadoTextView: TextView = formularioFrijolView.findViewById(R.id.tvResult)
+        val predictButton: Button = formularioFrijolView.findViewById(R.id.btnPredictBeans)
+        val clasificacionTextView: TextView = formularioFrijolView.findViewById(R.id.tvClassification)
+        val consejosTextView: TextView = formularioFrijolView.findViewById(R.id.tvAdvice)
+
+        // Fertilizer section
+        val switchFertilizer: Switch = formularioFrijolView.findViewById(R.id.switchFertilizer)
+        val layoutFertilizer: LinearLayout = formularioFrijolView.findViewById(R.id.layoutFertilizer)
+        val beansAcreageFertilizerInput: EditText = formularioFrijolView.findViewById(R.id.etBeansHectareFertilizer)
+        val beansFertilizerCostInput: EditText = formularioFrijolView.findViewById(R.id.etBeansFertilizerCost)
+
+        // Chemical section
+        val switchChemicals: Switch = formularioFrijolView.findViewById(R.id.switchChemicals)
+        val layoutChemicals: LinearLayout = formularioFrijolView.findViewById(R.id.layoutChemicals)
+        val beansChemicalAcreageInput: EditText = formularioFrijolView.findViewById(R.id.etBeansChemicalHectare)
+        val beansChemicalCostInput: EditText = formularioFrijolView.findViewById(R.id.etBeansChemicalCost)
+
+        // Machinery section
+        val switchMachinery: Switch = formularioFrijolView.findViewById(R.id.switchMachinery)
+        val layoutMachinery: LinearLayout = formularioFrijolView.findViewById(R.id.layoutMachinery)
+        val beansMachineryAcreageInput: EditText = formularioFrijolView.findViewById(R.id.etBeansMachineryHectare)
+        val beansMachineryCostInput: EditText = formularioFrijolView.findViewById(R.id.etBeansMachineryCost)
+
+        // Listeners for switches to show/hide layouts
+        switchFertilizer.setOnCheckedChangeListener { _, isChecked ->
+            layoutFertilizer.visibility = if (isChecked) View.VISIBLE else View.GONE
+        }
+        switchChemicals.setOnCheckedChangeListener { _, isChecked ->
+            layoutChemicals.visibility = if (isChecked) View.VISIBLE else View.GONE
+        }
+        switchMachinery.setOnCheckedChangeListener { _, isChecked ->
+            layoutMachinery.visibility = if (isChecked) View.VISIBLE else View.GONE
+        }
+
+        // Prediction button action
+        predictButton.setOnClickListener {
+            val requestData = JSONObject()
+            requestData.put("crop_type", "frijol")
+            val parameters = JSONObject()
+
+            // Main input values
+            parameters.put("Year", yearInput.text.toString().toIntOrNull() ?: 2018)
+            parameters.put("beans_hectare", beansAcreageInput.text.toString().toDoubleOrNull() ?: 0.0)
+            parameters.put("beans_improved_hectare", beansImprovedAcreageInput.text.toString().toDoubleOrNull() ?: 0.0)
+            parameters.put("beans_improved_cost", beansImprovedCostInput.text.toString().toDoubleOrNull() ?: 0.0)
+            parameters.put("beans_harvested", beansHarvestedInput.text.toString().toDoubleOrNull() ?: 0.0)
+            parameters.put("beans_sold_price", beansSoldPriceInput.text.toString().toDoubleOrNull() ?: 0.0)
+            parameters.put("beans_harvest_loss", beansHarvestLossInput.text.toString().toDoubleOrNull() ?: 0.0)
+
+            // Add fertilizer parameters, set to 0.0 if hidden
+            parameters.put("beans_hectare_fertilizer", if (layoutFertilizer.visibility == View.VISIBLE) {
+                beansAcreageFertilizerInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
+            parameters.put("beans_fertilizer_cost", if (layoutFertilizer.visibility == View.VISIBLE) {
+                beansFertilizerCostInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
+
+            // Add chemical parameters, set to 0.0 if hidden
+            parameters.put("beans_chemical_hectare", if (layoutChemicals.visibility == View.VISIBLE) {
+                beansChemicalAcreageInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
+            parameters.put("beans_chemical_cost", if (layoutChemicals.visibility == View.VISIBLE) {
+                beansChemicalCostInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
+
+            // Add machinery parameters, set to 0.0 if hidden
+            parameters.put("beans_machinery_hectare", if (layoutMachinery.visibility == View.VISIBLE) {
+                beansMachineryAcreageInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
+            parameters.put("beans_machinery_cost", if (layoutMachinery.visibility == View.VISIBLE) {
+                beansMachineryCostInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
+
+            requestData.put("parameters", parameters)
+
+            // Send request using controller
+            controller.makePredictionRequest(requestData) { response ->
+                runOnUiThread {
+                    Log.d("ConsejosActivity", "Response: $response")  // Log response for debugging
+
+                    try {
+                        val jsonResponse = JSONObject(response)
+
+                        // Extract values from JSON response
+                        val rendimientoPredicho = jsonResponse.getDouble("Rendimiento_Predicho")
+                        val clasificacion = jsonResponse.getString("Clasificacion")
+                        val consejosArray = jsonResponse.getJSONArray("Consejos")
+
+                        // Display predicted yield
+                        val formattedResult = String.format("%.2f kg/ha", rendimientoPredicho)
+                        resultadoTextView.text = "Rendimiento Predicho: $formattedResult"
+
+                        // Display classification
+                        clasificacionTextView.text = "Clasificación: $clasificacion"
+
+                        // Display advice in list format
+                        val consejosText = StringBuilder("")
+                        for (i in 0 until consejosArray.length()) {
+                            consejosText.append("- ${consejosArray.getString(i)}\n")
+                        }
+                        consejosTextView.text = consejosText.toString()
+
+                    } catch (e: Exception) {
+                        Log.e("ConsejosActivity", "Error al procesar la respuesta JSON", e)
+                        resultadoTextView.text = "Error al obtener la predicción"
+                        clasificacionTextView.text = ""
+                        consejosTextView.text = ""
+                    }
+                }
+            }
+        }
+    }
 
 }

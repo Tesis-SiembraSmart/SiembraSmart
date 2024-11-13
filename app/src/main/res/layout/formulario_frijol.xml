@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="16dp">
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Predicción de Rendimiento de Frijol"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"
+        android:gravity="center" />
+
+    <!-- ScrollView para hacer desplazable el contenido del formulario -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <!-- Año -->
+            <EditText
+                android:id="@+id/etYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Año"
+                android:inputType="number"
+                android:layout_marginTop="8dp" />
+
+            <!-- Área de Frijol -->
+            <EditText
+                android:id="@+id/etBeansHectare"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Área de Frijol (ha)"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
+            <!-- Área Mejorada de Frijol -->
+            <EditText
+                android:id="@+id/etBeansImprovedHectare"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Área Mejorada de Frijol (ha)"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
+            <!-- Costo de Mejora de Frijol -->
+            <EditText
+                android:id="@+id/etBeansImprovedCost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Costo Mejorado de Frijol"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
+            <!-- Switch para Fertilizantes -->
+            <Switch
+                android:id="@+id/switchFertilizer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:thumbTint="@color/verde_icon"
+                android:text="¿Utilizó fertilizantes?"
+                android:layout_marginTop="16dp" />
+
+            <!-- Campos relacionados con Fertilizantes -->
+            <LinearLayout
+                android:id="@+id/layoutFertilizer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/etBeansHectareFertilizer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Área Fertilizada de Frijol (ha)"
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="8dp" />
+
+                <EditText
+                    android:id="@+id/etBeansFertilizerCost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Costo de Fertilizante para Frijol"
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <!-- Switch para Químicos -->
+            <Switch
+                android:id="@+id/switchChemicals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:thumbTint="@color/verde_icon"
+                android:text="¿Utilizó químicos?"
+                android:layout_marginTop="16dp" />
+
+            <!-- Campos relacionados con Químicos -->
+            <LinearLayout
+                android:id="@+id/layoutChemicals"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/etBeansChemicalHectare"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Área de Químicos para Frijol (ha)"
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="8dp" />
+
+                <EditText
+                    android:id="@+id/etBeansChemicalCost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Costo de Químicos para Frijol"
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <!-- Switch para Maquinaria -->
+            <Switch
+                android:id="@+id/switchMachinery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:thumbTint="@color/verde_icon"
+                android:text="¿Utilizó maquinaria?"
+                android:layout_marginTop="16dp" />
+
+            <!-- Campos relacionados con Maquinaria -->
+            <LinearLayout
+                android:id="@+id/layoutMachinery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/etBeansMachineryHectare"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Área de Maquinaria para Frijol (ha)"
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="8dp" />
+
+                <EditText
+                    android:id="@+id/etBeansMachineryCost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Costo de Maquinaria para Frijol"
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <!-- Frijol Cosechado -->
+            <EditText
+                android:id="@+id/etBeansHarvested"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Frijol Cosechado"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
+            <!-- Precio de Venta de Frijol -->
+            <EditText
+                android:id="@+id/etBeansSoldPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Precio de Venta de Frijol"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+
+            <!-- Pérdida en la Cosecha de Frijol -->
+            <EditText
+                android:id="@+id/etBeansHarvestLoss"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Pérdida en la Cosecha de Frijol"
+                android:inputType="numberDecimal"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Botón para realizar la predicción -->
+    <Button
+        android:id="@+id/btnPredictBeans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calcular Predicción"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/verde_icon" />
+
+    <!-- Resultado de la predicción -->
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rendimiento Predicho: -"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"
+        android:textColor="@android:color/black" />
+
+    <!-- Clasificación -->
+    <TextView
+        android:id="@+id/tvClassification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clasificación: -"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Consejos -->
+    <TextView
+        android:id="@+id/tvAdviceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Consejos:"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/tvAdvice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="4dp"
+        android:text="Aquí aparecerán los consejos después de la predicción."
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+</LinearLayout>
