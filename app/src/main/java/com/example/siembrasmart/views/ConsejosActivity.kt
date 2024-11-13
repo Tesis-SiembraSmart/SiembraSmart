@@ -55,6 +55,8 @@ class ConsejosActivity : Navigation() {
         when (modelo.lowercase()) {
             "cacao" -> cargarFormularioCacao()
             "cafe" -> cargarFormularioCafe()
+            "maíz" -> cargarFormularioMaiz()
+
             else -> Log.d("ConsejosActivity", "No hay formulario disponible para el modelo: $modelo")
         }
     }
@@ -253,6 +255,130 @@ class ConsejosActivity : Navigation() {
     }
 
 
+    private fun cargarFormularioMaiz() {
+        val formularioMaizView = layoutInflater.inflate(R.layout.formulario_maiz, binding.formularioContainer, false)
+        binding.formularioContainer.addView(formularioMaizView)
+
+        // Input fields for maize parameters
+        val yearInput: EditText = formularioMaizView.findViewById(R.id.etYear)
+        val maizeAcreageInput: EditText = formularioMaizView.findViewById(R.id.etMaizeHectare)
+        val maizeImprovedAcreageInput: EditText = formularioMaizView.findViewById(R.id.etMaizeImprovedHectare)
+        val maizeImprovedCostInput: EditText = formularioMaizView.findViewById(R.id.etMaizeImprovedCost)
+        val maizeHarvestedInput: EditText = formularioMaizView.findViewById(R.id.etMaizeHarvested)
+        val maizeSoldPriceInput: EditText = formularioMaizView.findViewById(R.id.etMaizeSoldPrice)
+        val maizeHarvestLossInput: EditText = formularioMaizView.findViewById(R.id.etMaizeHarvestLoss)
+        val resultadoTextView: TextView = formularioMaizView.findViewById(R.id.tvResult)
+        val predictButton: Button = formularioMaizView.findViewById(R.id.btnPredictMaize)
+        val clasificacionTextView: TextView = formularioMaizView.findViewById(R.id.tvClassification)
+        val consejosTextView: TextView = formularioMaizView.findViewById(R.id.tvAdvice)
+
+        // Fertilizer section
+        val switchFertilizer: Switch = formularioMaizView.findViewById(R.id.switchFertilizer)
+        val layoutFertilizer: LinearLayout = formularioMaizView.findViewById(R.id.layoutFertilizer)
+        val maizeAcreageFertilizerInput: EditText = formularioMaizView.findViewById(R.id.etMaizeHectareFertilizer)
+        val maizeFertilizerCostInput: EditText = formularioMaizView.findViewById(R.id.etMaizeFertilizerCost)
+
+        // Chemical section
+        val switchChemicals: Switch = formularioMaizView.findViewById(R.id.switchChemicals)
+        val layoutChemicals: LinearLayout = formularioMaizView.findViewById(R.id.layoutChemicals)
+        val maizeChemicalAcreageInput: EditText = formularioMaizView.findViewById(R.id.etMaizeChemicalHectare)
+        val maizeChemicalCostInput: EditText = formularioMaizView.findViewById(R.id.etMaizeChemicalCost)
+
+        // Machinery section
+        val switchMachinery: Switch = formularioMaizView.findViewById(R.id.switchMachinery)
+        val layoutMachinery: LinearLayout = formularioMaizView.findViewById(R.id.layoutMachinery)
+        val maizeMachineryAcreageInput: EditText = formularioMaizView.findViewById(R.id.etMaizeMachineryHectare)
+        val maizeMachineryCostInput: EditText = formularioMaizView.findViewById(R.id.etMaizeMachineryCost)
+
+        // Listeners for switches to show/hide layouts
+        switchFertilizer.setOnCheckedChangeListener { _, isChecked ->
+            layoutFertilizer.visibility = if (isChecked) View.VISIBLE else View.GONE
+        }
+        switchChemicals.setOnCheckedChangeListener { _, isChecked ->
+            layoutChemicals.visibility = if (isChecked) View.VISIBLE else View.GONE
+        }
+        switchMachinery.setOnCheckedChangeListener { _, isChecked ->
+            layoutMachinery.visibility = if (isChecked) View.VISIBLE else View.GONE
+        }
+
+        // Prediction button action
+        predictButton.setOnClickListener {
+            val requestData = JSONObject()
+            requestData.put("crop_type", "maiz")
+            val parameters = JSONObject()
+
+            // Main input values
+            parameters.put("Year", yearInput.text.toString().toIntOrNull() ?: 2018)
+            parameters.put("maize_hectare", maizeAcreageInput.text.toString().toDoubleOrNull() ?: 0.0)
+            parameters.put("maize_improved_hectare", maizeImprovedAcreageInput.text.toString().toDoubleOrNull() ?: 0.0)
+            parameters.put("maize_improved_cost", maizeImprovedCostInput.text.toString().toDoubleOrNull() ?: 0.0)
+            parameters.put("maize_harvested", maizeHarvestedInput.text.toString().toDoubleOrNull() ?: 0.0)
+            parameters.put("maize_sold_price", maizeSoldPriceInput.text.toString().toDoubleOrNull() ?: 0.0)
+            parameters.put("maize_harvest_loss", maizeHarvestLossInput.text.toString().toDoubleOrNull() ?: 0.0)
+
+            // Add fertilizer parameters, set to 0.0 if hidden
+            parameters.put("maize_hectare_fertilizer", if (layoutFertilizer.visibility == View.VISIBLE) {
+                maizeAcreageFertilizerInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
+            parameters.put("maize_fertilizer_cost", if (layoutFertilizer.visibility == View.VISIBLE) {
+                maizeFertilizerCostInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
+
+            // Add chemical parameters, set to 0.0 if hidden
+            parameters.put("maize_chemical_hectare", if (layoutChemicals.visibility == View.VISIBLE) {
+                maizeChemicalAcreageInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
+            parameters.put("maize_chemical_cost", if (layoutChemicals.visibility == View.VISIBLE) {
+                maizeChemicalCostInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
+
+            // Add machinery parameters, set to 0.0 if hidden
+            parameters.put("maize_machinery_hectare", if (layoutMachinery.visibility == View.VISIBLE) {
+                maizeMachineryAcreageInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
+            parameters.put("maize_machinery_cost", if (layoutMachinery.visibility == View.VISIBLE) {
+                maizeMachineryCostInput.text.toString().toDoubleOrNull() ?: 0.0
+            } else 0.0)
+
+            requestData.put("parameters", parameters)
+
+            // Send request using controller
+            controller.makePredictionRequest(requestData) { response ->
+                runOnUiThread {
+                    Log.d("ConsejosActivity", "Response: $response")  // Log response for debugging
+
+                    try {
+                        val jsonResponse = JSONObject(response)
+
+                        // Extract values from JSON response
+                        val rendimientoPredicho = jsonResponse.getDouble("Rendimiento_Predicho")
+                        val clasificacion = jsonResponse.getString("Clasificacion")
+                        val consejosArray = jsonResponse.getJSONArray("Consejos")
+
+                        // Display predicted yield
+                        val formattedResult = String.format("%.2f kg/ha", rendimientoPredicho)
+                        resultadoTextView.text = "Rendimiento Predicho: $formattedResult"
+
+                        // Display classification
+                        clasificacionTextView.text = "Clasificación: $clasificacion"
+
+                        // Display advice in list format
+                        val consejosText = StringBuilder("")
+                        for (i in 0 until consejosArray.length()) {
+                            consejosText.append("- ${consejosArray.getString(i)}\n")
+                        }
+                        consejosTextView.text = consejosText.toString()
+
+                    } catch (e: Exception) {
+                        Log.e("ConsejosActivity", "Error al procesar la respuesta JSON", e)
+                        resultadoTextView.text = "Error al obtener la predicción"
+                        clasificacionTextView.text = ""
+                        consejosTextView.text = ""
+                    }
+                }
+            }
+        }
+    }
 
 
 }
